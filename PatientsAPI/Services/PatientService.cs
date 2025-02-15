@@ -16,7 +16,7 @@ namespace PatientsAPI.Services
         public async Task<PatientModel?> GetById(int id)
         {
             var patient = await this._patientRepository.GetById(id);
-            return this.GetModelFromData(patient);
+            return patient != null ? this.GetModelFromData(patient) : null;
         }
 
         public async Task<IEnumerable<PatientModel>> GetAll()
