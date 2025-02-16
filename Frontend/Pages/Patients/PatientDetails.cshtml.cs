@@ -25,7 +25,7 @@ namespace Frontend.Pages.Patients
             }
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            Patient = await _httpClient.GetFromJsonAsync<Patient>($"https://localhost:7242/Patient/display/{id}");
+            Patient = await _httpClient.GetFromJsonAsync<Patient>($"https://localhost:7258/Patient/display/{id}");
         }
     }
 }

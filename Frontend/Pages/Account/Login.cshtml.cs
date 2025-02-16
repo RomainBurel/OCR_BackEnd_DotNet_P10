@@ -27,7 +27,7 @@ namespace Frontend.Pages.Account
         public async Task<IActionResult> OnPostAsync()
         {
             var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.PostAsJsonAsync("https://localhost:7233/api/Authorization/login", Input);
+            var response = await httpClient.PostAsJsonAsync("https://localhost:7258/Authorization/login", Input);
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, "Login failed. Check your credentials.");
