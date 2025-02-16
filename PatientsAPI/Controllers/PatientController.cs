@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PatientsAPI.Models;
 using PatientsAPI.Services;
 
 namespace PatientsAPI.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
+    [Authorize]
     public class PatientController : Controller
     {
         private readonly ILogger<PatientController> _logger;
