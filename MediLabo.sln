@@ -7,13 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientsAPI", "PatientsAPI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityAPI", "IdentityAPI\IdentityAPI.csproj", "{6C62EF50-C94F-4AD9-AB1E-92F7C63B2344}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{6AB61118-A293-4CD4-B5E7-445CE0520C47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1E48DACB-5EB0-4B33-94AA-2E28DFC97B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +23,12 @@ Global
 		{6C62EF50-C94F-4AD9-AB1E-92F7C63B2344}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C62EF50-C94F-4AD9-AB1E-92F7C63B2344}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C62EF50-C94F-4AD9-AB1E-92F7C63B2344}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AB61118-A293-4CD4-B5E7-445CE0520C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AB61118-A293-4CD4-B5E7-445CE0520C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AB61118-A293-4CD4-B5E7-445CE0520C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AB61118-A293-4CD4-B5E7-445CE0520C47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
