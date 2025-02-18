@@ -4,7 +4,7 @@
     "Identityhttp": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5139",
       "environmentVariables": {
@@ -14,7 +14,7 @@
     "Identityhttps": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7233;http://localhost:5139",
       "environmentVariables": {

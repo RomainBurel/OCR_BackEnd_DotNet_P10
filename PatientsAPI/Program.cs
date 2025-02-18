@@ -7,19 +7,19 @@ using PatientsAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
 // Configuration de la base de données
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Récupération de la clé secrète depuis IdentityAPI
-var key = Encoding.UTF8.GetBytes("MediLaboSecretForAuthentication123456@!/*"); // Doit être la même que dans IdentityAPI
+// Récupération de la clé secrète (doit être la même que IdentityAPI)
+var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = "https://localhost:7233"; // L'URL de IdentityAPI
-        options.RequireHttpsMetadata = false; // À activer en production
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = false,

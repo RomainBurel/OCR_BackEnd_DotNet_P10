@@ -8,9 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Chargement de la configuration Ocelot
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+ConfigurationManager configuration = builder.Configuration;
 
-// Récupération de la clé secrète depuis IdentityAPI
-var key = Encoding.UTF8.GetBytes("MediLaboSecretForAuthentication123456@!/*"); // Doit être la même que dans IdentityAPI
+// Récupération de la clé secrète (doit être la même que IdentityAPI)
+var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
