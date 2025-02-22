@@ -6,6 +6,8 @@ namespace PatientsAPI.Services
     {
         public Task<PatientModel?> GetById(int id);
 
+        public Task<PatientModelUpdate?> GetByIdForUpdate(int id);
+
         public Task<IEnumerable<PatientModel>> GetAll();
 
         public Task<bool> Exists(int id);

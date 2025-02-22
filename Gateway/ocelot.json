@@ -23,9 +23,21 @@
           "Port": 7242
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/Gender/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/Gender/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7242
+        }
+      ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:7258"
+    "BaseUrl": "http://localhost:7000"
   }
 }

@@ -57,6 +57,23 @@ namespace PatientsAPI.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("update/{patientId}")]
+        public async Task<ActionResult> UpdatePatient(int patientId)
+        {
+            this._logger.LogInformation($"{nameof(UpdatePatient)} : called with patientId {patientId}");
+            var result = await this._patientService.GetByIdForUpdate(patientId);
+
+            if (result == null)
+            {
+                _logger.LogWarning($"Patient with id {patientId} not found");
+                return NotFound($"Patient with id {patientId} not found");
+            }
+
+            _logger.LogInformation($"Patient with id {patientId} not found");
+            return Ok(result);
+        }
+
         [HttpPut]
         [Route("update/{patientId}")]
         public async Task<IActionResult> UpdatePatient(int patientId, [FromBody] PatientModelUpdate patientModelUpdate)

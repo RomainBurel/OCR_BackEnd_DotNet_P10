@@ -64,7 +64,9 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<DbContext, ApplicationDbContext>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IGenderRepository, GenderRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IGenderService, GenderService>();
 
 var app = builder.Build();
 

@@ -19,6 +19,12 @@ namespace PatientsAPI.Services
             return patient != null ? this.GetModelFromData(patient) : null;
         }
 
+        public async Task<PatientModelUpdate?> GetByIdForUpdate(int id)
+        {
+            var patient = await this._patientRepository.GetById(id);
+            return patient != null ? this.GetModelUpdateFromData(patient) : null;
+        }
+
         public async Task<IEnumerable<PatientModel>> GetAll()
         {
             var patients = await this._patientRepository.GetAll();
@@ -51,6 +57,19 @@ namespace PatientsAPI.Services
             return new PatientModel()
             {
                 PatientId = patient.PatientId,
+                FirstName = patient.FirstName,
+                LastName = patient.LastName,
+                DateOfBirth = patient.DateOfBirth,
+                GenderId = patient.GenderId,
+                Address = patient.Address,
+                PhoneNumber = patient.PhoneNumber
+            };
+        }
+
+        private PatientModelUpdate GetModelUpdateFromData(Patient patient)
+        {
+            return new PatientModelUpdate()
+            {
                 FirstName = patient.FirstName,
                 LastName = patient.LastName,
                 DateOfBirth = patient.DateOfBirth,
