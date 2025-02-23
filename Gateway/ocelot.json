@@ -25,6 +25,22 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/Notes/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "GatewayAuth",
+        "AllowedScopes": []
+      },
+      "DownstreamPathTemplate": "/Notes/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7121
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/Gender/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/Gender/{everything}",
