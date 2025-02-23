@@ -1,0 +1,33 @@
+﻿@using FrontendMVC.Models.Entities
+@model List<Patient>
+
+<h2>Liste des patients</h2>
+
+<table>
+    <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Date de naissance</th>
+        <th>Adresse</th>
+        <th>Téléphone</th>
+        <th>Actions</th>
+    </tr>
+    <a asp-controller="Patients" asp-action="Create" class="btn btn-primary">Ajouter un patient</a>
+    @foreach (var patient in Model)
+    {
+        <tr>
+            <td>@patient.LastName</td>
+            <td>@patient.FirstName</td>
+            <td>@patient.DateOfBirth.ToShortDateString()</td>
+            <td>@patient.Address</td>
+            <td>@patient.PhoneNumber</td>
+            <td><a asp-controller="Patients" asp-action="Details" asp-route-id="@patient.PatientId" class="btn btn-primary">Détails</a></td>
+			<td><a asp-controller="Patients" asp-action="Update" asp-route-id="@patient.PatientId" class="btn btn-warning">Modifier</a></td>
+            <td>
+                <form asp-controller="Patients" asp-action="Delete" asp-route-Id="@patient.PatientId" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer ce patient ?');">
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>

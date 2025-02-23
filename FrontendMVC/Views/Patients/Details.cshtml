@@ -1,0 +1,14 @@
+﻿@using FrontendMVC.Models.Entities
+@model Patient
+
+<h2>Détail du patient</h2>
+
+<table>
+    <tr><th>Nom :</th><td>@Model.LastName</td></tr>
+    <tr><th>Prénom :</th><td>@Model.FirstName</td></tr>
+    <tr><th>Date de naissance :</th><td>@Model.DateOfBirth.ToShortDateString()</td></tr>
+    <tr><th>Adresse :</th><td>@Model.Address</td></tr>
+    <tr><th>Téléphone :</th><td>@Model.PhoneNumber</td></tr>
+</table>
+
+<a class="nav-link text-dark" asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>

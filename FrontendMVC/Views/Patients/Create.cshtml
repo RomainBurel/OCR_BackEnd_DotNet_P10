@@ -1,0 +1,38 @@
+﻿@model FrontendMVC.Models.PatientModelAdd
+
+<h2>Ajouter un Patient</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Prénom</label>
+        <input asp-for="FirstName" required />
+    </div>
+    <div>
+        <label>Nom</label>
+        <input asp-for="LastName" required />
+    </div>
+    <div>
+        <label>Date de naissance</label>
+        <input asp-for="DateOfBirth" type="date" required />
+    </div>
+    <div>
+        <label>Genre</label>
+        <select asp-for="GenderId">
+            @foreach (var gender in ViewBag.Genders)
+            {
+                <option value="@gender.Id">@gender.GenderName</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label>Adresse</label>
+        <input asp-for="Address" />
+    </div>
+    <div>
+        <label>Téléphone</label>
+        <input asp-for="PhoneNumber" />
+    </div>
+    <button type="submit">Enregistrer</button>
+</form>
+
+<a asp-controller="Patients" asp-action="Index">Retour à la liste</a>
