@@ -13,7 +13,7 @@ namespace NotesAPI.Repositories
         {
             var mongoClient = new MongoClient(noteDatabaseSettings.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(noteDatabaseSettings.Value.DatabaseName);
-            this._notesCollection = mongoDatabase.GetCollection<Note>(noteDatabaseSettings.Value.NotesCollectionName);
+            this._notesCollection = mongoDatabase.GetCollection<Note>(noteDatabaseSettings.Value.CollectionName);
         }
 
         public async Task Add(Note newNote)

@@ -8,7 +8,7 @@ namespace NotesAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    //[Authorize]
     public class NotesController : ControllerBase
     {
         private readonly INoteService _noteService;
@@ -19,6 +19,7 @@ namespace NotesAPI.Controllers
         }
 
         [HttpGet]
+        [Route("display/{noteId}")]
         public async Task<ActionResult<Note>> GetNote(string noteId)
         {
             var note = await this._noteService.GetById(noteId);
@@ -26,13 +27,17 @@ namespace NotesAPI.Controllers
         }
 
         [HttpGet]
+        [Route("displayPatientNotes/{patientId}")]
         public async Task<ActionResult<IEnumerable<Note>>> GetPatientNotes(int patientId)
         {
+            Console.WriteLine($"Utilisateur authentifié ? {User.Identity.IsAuthenticated}");
+            Console.WriteLine($"Claims reçus : {string.Join(", ", User.Claims.Select(c => c.Type + " = " + c.Value))}");
             var notes = await this._noteService.GetAllForAPatient(patientId);
             return Ok(notes);
         }
 
         [HttpPost]
+        [Route("creation")]
         public async Task<ActionResult> CreateNote(NoteModelAdd note)
         {
             try
@@ -47,6 +52,7 @@ namespace NotesAPI.Controllers
         }
 
         [HttpPut]
+        [Route("update/{noteId}")]
         public async Task<ActionResult> UpdateNote(string noteId, NoteModelUpdate note)
         {
             try
@@ -61,11 +67,12 @@ namespace NotesAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteNote(string note)
+        [Route("deletion/{noteId}")]
+        public async Task<ActionResult> DeleteNote(string noteId)
         {
             try
             {
-                await this._noteService.Delete(note);
+                await this._noteService.Delete(noteId);
                 return Ok();
             }
             catch (Exception ex)
@@ -75,6 +82,7 @@ namespace NotesAPI.Controllers
         }
 
         [HttpDelete]
+        [Route("deletionForPatient/{patientId}")]
         public async Task<ActionResult> DeletePatientNotes(int patientId)
         {
             try

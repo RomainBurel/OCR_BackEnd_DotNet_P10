@@ -25,22 +25,6 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/Notes/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "GatewayAuth",
-        "AllowedScopes": []
-      },
-      "DownstreamPathTemplate": "/Notes/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7121
-        }
-      ]
-    },
-    {
       "UpstreamPathTemplate": "/Gender/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/Gender/{everything}",
@@ -49,6 +33,18 @@
         {
           "Host": "localhost",
           "Port": 7242
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/Notes/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/Notes/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7121
         }
       ]
     }
