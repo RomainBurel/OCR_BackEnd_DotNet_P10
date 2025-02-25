@@ -22,7 +22,11 @@
           "Host": "localhost",
           "Port": 7242
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/Gender/{everything}",
@@ -34,7 +38,11 @@
           "Host": "localhost",
           "Port": 7242
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/Notes/{everything}",
@@ -46,7 +54,11 @@
           "Host": "localhost",
           "Port": 7121
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
   ],
   "GlobalConfiguration": {

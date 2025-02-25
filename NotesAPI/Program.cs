@@ -9,6 +9,8 @@ using NotesAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
 ConfigurationManager configuration = builder.Configuration;
 
 // Configuration MongoDB
@@ -21,26 +23,46 @@ var database = client.GetDatabase(mongoSettings["DatabaseName"]);
 
 builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings["CollectionName"]));
 
-// Récupération de la clé secrète (doit être la même que IdentityAPI)
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = "https://localhost:7233"; // L'URL de IdentityAPI
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key)
+            ValidIssuer = configuration["JwtSettings:Issuer"],
+            ValidAudience = configuration["JwtSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"ERREUR AUTHENTIFICATION : {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine("JWT REJETÉ : " + context.ErrorDescription);
+                return Task.CompletedTask;
+            },
+            OnMessageReceived = context =>
+            {
+                Console.WriteLine($"Token reçu : {context.Token}");
+                return Task.CompletedTask;
+            }
         };
     });
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers()
+builder.Services.AddControllers().AddNewtonsoftJson()
     .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

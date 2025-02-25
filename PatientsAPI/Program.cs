@@ -13,19 +13,19 @@ ConfigurationManager configuration = builder.Configuration;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Récupération de la clé secrète (doit être la même que IdentityAPI)
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = "https://localhost:7233"; // L'URL de IdentityAPI
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["JwtSettings:Issuer"],
+            ValidAudience = configuration["JwtSettings:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
