@@ -10,8 +10,5 @@ namespace NotesAPI.Models
 
         [BsonRepresentation(BsonType.String)]
         public string Content { get; set; }
-
-        [BsonRepresentation(BsonType.DateTime)]
-        public DateTime CreatedAt { get; set; }
     }
 }

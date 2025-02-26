@@ -36,4 +36,33 @@
     <button type="submit">Enregistrer</button>
 </form>
 
+<h3>Notes Médicales</h3>
+@if (Model.Notes.Any())
+{
+    <ul>
+        @foreach (var note in Model.Notes)
+        {
+            <li>
+                <p>@note.Content</p>
+                <p><small>Ajouté le : @note.CreatedAt</small></p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Aucune note disponible.</p>
+}
+
+<h3>Ajouter une Note</h3>
+<form asp-controller="Patients" asp-action="AddNote" method="post">
+    <input type="hidden" name="Id" value="@Model.PatientId" />
+
+    <div>
+        <textarea name="Content" required></textarea>
+    </div>
+
+    <button type="submit">Ajouter</button>
+</form>
+
 <a asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>

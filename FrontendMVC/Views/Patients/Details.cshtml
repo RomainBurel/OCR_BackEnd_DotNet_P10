@@ -1,14 +1,32 @@
-﻿@using FrontendMVC.Models.Entities
-@model Patient
+﻿@using FrontendMVC.Models
+@model PatientDetailsViewModel
 
 <h2>Détail du patient</h2>
 
 <table>
-    <tr><th>Nom :</th><td>@Model.LastName</td></tr>
-    <tr><th>Prénom :</th><td>@Model.FirstName</td></tr>
-    <tr><th>Date de naissance :</th><td>@Model.DateOfBirth.ToShortDateString()</td></tr>
-    <tr><th>Adresse :</th><td>@Model.Address</td></tr>
-    <tr><th>Téléphone :</th><td>@Model.PhoneNumber</td></tr>
+    <tr><th>Nom :</th><td>@Model.Patient.LastName</td></tr>
+    <tr><th>Prénom :</th><td>@Model.Patient.FirstName</td></tr>
+    <tr><th>Date de naissance :</th><td>@Model.Patient.DateOfBirth.ToShortDateString()</td></tr>
+    <tr><th>Adresse :</th><td>@Model.Patient.Address</td></tr>
+    <tr><th>Téléphone :</th><td>@Model.Patient.PhoneNumber</td></tr>
 </table>
+
+<h3>Notes Médicales</h3>
+@if (Model.Notes.Any())
+{
+    <ul>
+        @foreach (var note in Model.Notes)
+        {
+            <li>
+                <p>@note.Content</p>
+                <p><small>Ajouté le : @note.CreatedAt</small></p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Aucune note disponible.</p>
+}
 
 <a class="nav-link text-dark" asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>
