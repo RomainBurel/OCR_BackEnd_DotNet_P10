@@ -1,4 +1,4 @@
-﻿using NotesAPI.Models;
+﻿using NotesAPI_SharedModels;
 
 namespace NotesAPI.Services
 {

@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace NotesAPI.Models
+namespace NotesAPI_SharedModels
 {
     public class NoteModelUpdate
     {

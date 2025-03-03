@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NotesAPI.Domain;
-using NotesAPI.Models;
+using NotesAPI_SharedModels;
 using NotesAPI.Services;
 
 namespace NotesAPI.Controllers

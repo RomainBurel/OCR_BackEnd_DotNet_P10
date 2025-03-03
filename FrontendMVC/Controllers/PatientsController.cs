@@ -1,5 +1,6 @@
 ﻿using FrontendMVC.Models;
 using FrontendMVC.Models.Entities;
+using NotesAPI_SharedModels;
 using PatientsAPI_SharedModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

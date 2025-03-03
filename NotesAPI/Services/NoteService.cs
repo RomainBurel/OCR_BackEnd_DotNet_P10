@@ -1,5 +1,5 @@
 ﻿using NotesAPI.Domain;
-using NotesAPI.Models;
+using NotesAPI_SharedModels;
 using NotesAPI.Repositories;
 
 namespace NotesAPI.Services
