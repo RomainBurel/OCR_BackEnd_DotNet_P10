@@ -16,6 +16,8 @@ namespace NotesAPI.Services
 
         public Task<NoteModel?> GetById(string id);
 
+        public Task<NoteModelUpdate?> GetByIdForUpdate(string id);
+
         public Task Update(string id, NoteModelUpdate updatedNote);
     }
 }

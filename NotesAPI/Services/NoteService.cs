@@ -45,6 +45,12 @@ namespace NotesAPI.Services
             return note != null ? this.GetModelFromData(note) : null;
         }
 
+        public async Task<NoteModelUpdate?> GetByIdForUpdate(string id)
+        {
+            var note = await this._noteRepository.GetById(id);
+            return note != null ? this.GetModelUpdateFromData(note) : null;
+        }
+
         public async Task Update(string id, NoteModelUpdate updatedNote)
         {
             var note = await this.GetDataFromModelUpdate(id, updatedNote);
@@ -62,6 +68,14 @@ namespace NotesAPI.Services
             };
         }
 
+        private NoteModelUpdate GetModelUpdateFromData(Note note)
+        {
+            return new NoteModelUpdate()
+            {
+                Content = note.Content,
+            };
+        }
+
         private Note GetDataFromModelAdd(NoteModelAdd modelAdd)
         {
             return new Note()
@@ -75,7 +89,6 @@ namespace NotesAPI.Services
         private async Task<Note> GetDataFromModelUpdate(string id, NoteModelUpdate modelUpdate)
         {
             var noteModel = await this._noteRepository.GetById(id);
-            noteModel.PatientId = modelUpdate.PatientId;
             noteModel.Content = modelUpdate.Content;
             return noteModel;
         }

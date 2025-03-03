@@ -20,6 +20,18 @@
             <li>
                 <p>@note.Content</p>
                 <p><small>Ajouté le : @note.CreatedAt</small></p>
+
+                <a asp-controller="Patients" asp-action="UpdateNote" asp-route-noteId="@note.NoteId" asp-route-patientId="@Model.Patient.PatientId" class="btn btn-warning">
+                    Modifier
+                </a>
+
+                <form asp-controller="Patients" asp-action="DeleteNote" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@note.NoteId" />
+                    <input type="hidden" name="patientId" value="@Model.Patient.PatientId" />
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette note ?');">
+                        Supprimer
+                    </button>
+                </form>
             </li>
         }
     </ul>
@@ -29,4 +41,15 @@ else
     <p>Aucune note disponible.</p>
 }
 
-<a class="nav-link text-dark" asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>
+<h3>Ajouter une Note</h3>
+<form asp-controller="Patients" asp-action="AddNote" method="post">
+    <input type="hidden" name="Id" value="@Model.Patient.PatientId" />
+
+    <div>
+        <textarea name="Content" required></textarea>
+    </div>
+
+    <button type="submit">Ajouter</button>
+</form>
+
+<a asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>

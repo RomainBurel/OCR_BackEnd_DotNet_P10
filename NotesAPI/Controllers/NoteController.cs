@@ -51,6 +51,14 @@ namespace NotesAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("update/{noteId}")]
+        public async Task<ActionResult<Note>> UpdateNote(string noteId)
+        {
+            var note = await this._noteService.GetByIdForUpdate(noteId);
+            return Ok(note);
+        }
+
         [HttpPut]
         [Route("update/{noteId}")]
         public async Task<ActionResult> UpdateNote(string noteId, NoteModelUpdate note)
