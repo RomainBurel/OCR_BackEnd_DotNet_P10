@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PatientsAPIModels\PatientsAPI_SharedModels.csproj" />
     <ProjectReference Include="..\PatientsAPI\PatientsAPI.csproj" />
   </ItemGroup>
 

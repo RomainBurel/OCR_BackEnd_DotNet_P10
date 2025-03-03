@@ -1,8 +1,8 @@
 ﻿using FrontendMVC.Models;
 using FrontendMVC.Models.Entities;
+using PatientsAPI_SharedModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace FrontendMVC.Controllers

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesAPI", "NotesAPI\NotesA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontendMVC", "FrontendMVC\FrontendMVC.csproj", "{C130E31F-1539-419E-88CA-29BC49235CCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientsAPI_SharedModels", "PatientsAPI_SharedModels\PatientsAPI_SharedModels.csproj", "{501BACAC-C22E-4063-ACD2-D4F8DF826CA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{C130E31F-1539-419E-88CA-29BC49235CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C130E31F-1539-419E-88CA-29BC49235CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C130E31F-1539-419E-88CA-29BC49235CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{501BACAC-C22E-4063-ACD2-D4F8DF826CA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{501BACAC-C22E-4063-ACD2-D4F8DF826CA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{501BACAC-C22E-4063-ACD2-D4F8DF826CA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{501BACAC-C22E-4063-ACD2-D4F8DF826CA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,4 +18,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PatientsAPI_SharedModels\PatientsAPI_SharedModels.csproj" />
+  </ItemGroup>
+
 </Project>

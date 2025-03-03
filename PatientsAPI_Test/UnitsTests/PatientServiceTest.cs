@@ -1,9 +1,8 @@
 ﻿using Moq;
 using PatientsAPI.Domain;
-using PatientsAPI.Models;
+using PatientsAPI_SharedModels;
 using PatientsAPI.Repositories;
 using PatientsAPI.Services;
-using System.Runtime.InteropServices;
 
 namespace PatientsAPI_Test.UnitsTests
 {
