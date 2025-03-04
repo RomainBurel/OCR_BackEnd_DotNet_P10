@@ -22,4 +22,8 @@
     <ProjectReference Include="..\PatientsAPI_SharedModels\PatientsAPI_SharedModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

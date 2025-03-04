@@ -1,4 +1,4 @@
-﻿namespace PatientsAPI.Models
+﻿namespace PatientsAPI_SharedModels
 {
     public class GenderModel
     {

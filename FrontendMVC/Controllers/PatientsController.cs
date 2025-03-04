@@ -1,5 +1,4 @@
 ﻿using FrontendMVC.Models;
-using FrontendMVC.Models.Entities;
 using NotesAPI_SharedModels;
 using PatientsAPI_SharedModels;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +23,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var patients = await _httpClient.GetFromJsonAsync<List<Patient>>("https://localhost:7258/Patient/list");
+            var patients = await _httpClient.GetFromJsonAsync<List<PatientModel>>("https://localhost:7258/Patient/list");
             return View(patients);
         }
 
@@ -34,8 +33,8 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var patient = await _httpClient.GetFromJsonAsync<Patient>($"https://localhost:7258/Patient/display/{id}");
-            var notes = await _httpClient.GetFromJsonAsync<List<Note>>($"https://localhost:7258/Notes/displayPatientNotes/{id}");
+            var patient = await _httpClient.GetFromJsonAsync<PatientModel>($"https://localhost:7258/Patient/display/{id}");
+            var notes = await _httpClient.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7258/Notes/displayPatientNotes/{id}");
             var patientDetailsViewModel = new PatientDetailsViewModel { Patient = patient, Notes = notes };
 
             return View(patientDetailsViewModel);
@@ -47,7 +46,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var genders = await _httpClient.GetFromJsonAsync<List<Gender>>("https://localhost:7258/Gender/list");
+            var genders = await _httpClient.GetFromJsonAsync<List<GenderModel>>("https://localhost:7258/Gender/list");
             ViewBag.Genders = genders;
 
             return View();
@@ -77,7 +76,7 @@ namespace FrontendMVC.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var patient = await _httpClient.GetFromJsonAsync<PatientModelUpdate>($"https://localhost:7258/Patient/Update/{id}");
-            var genders = await _httpClient.GetFromJsonAsync<List<Gender>>("https://localhost:7258/Gender/list");
+            var genders = await _httpClient.GetFromJsonAsync<List<GenderModel>>("https://localhost:7258/Gender/list");
             ViewBag.PatientId = id;
             ViewBag.Genders = genders;
 

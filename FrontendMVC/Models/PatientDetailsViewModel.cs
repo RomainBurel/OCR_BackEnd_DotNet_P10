@@ -1,10 +1,11 @@
-﻿using FrontendMVC.Models.Entities;
+﻿using NotesAPI_SharedModels;
+using PatientsAPI_SharedModels;
 
 namespace FrontendMVC.Models
 {
     public class PatientDetailsViewModel
     {
-        public Patient Patient { get; set; }
-        public List<Note> Notes { get; set; }
+        public PatientModel Patient { get; set; }
+        public List<NoteModel> Notes { get; set; }
     }
 }
