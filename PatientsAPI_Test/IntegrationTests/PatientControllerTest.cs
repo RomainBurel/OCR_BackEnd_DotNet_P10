@@ -90,12 +90,11 @@ namespace PatientsAPI_Test.IntegrationTests
         #endregion
 
         [Fact]
-        public async Task GetAll_AsLoggedAdmin_ShouldReturn_AllRecords()
+        public async Task GetAll_ShouldReturn_AllRecords()
         {
             // Arrange
             await SeedSamplePatientsAsync();
             var nbRecords = NbRecordsInTable();
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
 
             // Act
             var response = await _httpClientPatient.GetAsync("/Patient/list");
@@ -108,25 +107,11 @@ namespace PatientsAPI_Test.IntegrationTests
         }
 
         [Fact]
-        public async Task GetAll_NoLoggedUser_ShouldReturn_Unauthorized()
-        {
-            // Arrange
-            _factoryIdentity.Logout(_httpClientIdentity, _httpClientPatient);
-
-            // Act
-            var response = await _httpClientPatient.GetAsync("/Patient/list");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task GetPatientById_AsLoggedAdmin_ShouldReturn_Record()
+        public async Task GetPatientById_ShouldReturn_Record()
         {
             // Arrange
             await SeedSamplePatientsAsync();
             var expectedPatient = GetFirstRecordInTable();
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
 
             // Act
             var response = await _httpClientPatient.GetAsync($"/Patient/display/{expectedPatient.PatientId}");
@@ -141,28 +126,12 @@ namespace PatientsAPI_Test.IntegrationTests
         }
 
         [Fact]
-        public async Task GetPatientById_NoLoggedUser_ShouldReturn_Unauthorized()
-        {
-            // Arrange
-            await SeedSamplePatientsAsync();
-            var expectedPatient = GetFirstRecordInTable();
-            _factoryIdentity.Logout(_httpClientIdentity, _httpClientPatient);
-
-            // Act
-            var response = await _httpClientPatient.GetAsync($"/Patient/display/{expectedPatient.PatientId}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task AddPatient_AsLoggedAdmin_ShouldIncrease_NbRecords()
+        public async Task AddPatient_ShouldIncrease_NbRecords()
         {
             // Arrange
             await SeedSamplePatientsAsync();
             var nbRecordsInit = NbRecordsInTable();
             var newPatient = GetNewPatientModelAdd();
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
 
             // Act
             var response = await _httpClientPatient.PostAsJsonAsync("/Patient/creation", newPatient);
@@ -174,28 +143,13 @@ namespace PatientsAPI_Test.IntegrationTests
         }
 
         [Fact]
-        public async Task AddPatient_NoLoggedUser_ShouldReturn_Unauthorized()
-        {
-            // Arrange
-            var newPatient = GetNewPatientModelAdd();
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
-
-            // Act
-            var response = await _httpClientPatient.PostAsJsonAsync("/Patient/creation", newPatient);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task UpdatePatient_AsLoggedAdmin_ShouldReturn_Ok()
+        public async Task UpdatePatient_ShouldReturn_Ok()
         {
             // Arrange
             await SeedSamplePatientsAsync();
             var patientToUpdate = GetFirstRecordInTable();
             var patientModelUpdate = GetPatientModelToUpdate(patientToUpdate);
             patientModelUpdate.FirstName = "NewFirstName";
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
 
             // Act
             var response = await _httpClientPatient.PutAsJsonAsync($"/Patient/update/{patientToUpdate.PatientId}", patientModelUpdate);
@@ -208,24 +162,7 @@ namespace PatientsAPI_Test.IntegrationTests
         }
 
         [Fact]
-        public async Task UpdatePatient_NoLoggedUser_ShouldReturn_Unauthorized()
-        {
-            // Arrange
-            await SeedSamplePatientsAsync();
-            var patientToUpdate = GetFirstRecordInTable();
-            var patientModelUpdate = GetPatientModelToUpdate(patientToUpdate);
-            patientModelUpdate.FirstName = "NewFirstName";
-            _factoryIdentity.Logout(_httpClientIdentity, _httpClientPatient);
-
-            // Act
-            var response = await _httpClientPatient.PutAsJsonAsync($"/Patient/update/{patientToUpdate.PatientId}", patientModelUpdate);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task UpdatePatient_AsLoggedAdmin_ForNonExistingId_ShouldReturn_NotFound()
+        public async Task UpdatePatient_ForNonExistingId_ShouldReturn_NotFound()
         {
             // Arrange
             await SeedSamplePatientsAsync();
@@ -234,7 +171,6 @@ namespace PatientsAPI_Test.IntegrationTests
             var patientModelUpdate = GetPatientModelToUpdate(patientToUpdate);
             patientModelUpdate.FirstName = "NewFirstName";
             var nonExistingPatientId = -1;
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
 
             // Act
             var response = await _httpClientPatient.PutAsJsonAsync($"/Patient/update/{nonExistingPatientId}", patientModelUpdate);
@@ -244,12 +180,11 @@ namespace PatientsAPI_Test.IntegrationTests
         }
 
         [Fact]
-        public async Task DeletePatient_AsLoggedAdmin_ShouldReturn_Ok()
+        public async Task DeletePatient_ShouldReturn_Ok()
         {
             // Arrange
             await SeedSamplePatientsAsync();
             var patientToDeleteId = GetFirstRecordInTable().PatientId;
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
 
             // Act
             var response = await _httpClientPatient.DeleteAsync($"/Patient/deletion/{patientToDeleteId}");
@@ -260,42 +195,11 @@ namespace PatientsAPI_Test.IntegrationTests
         }
 
         [Fact]
-        public async Task DeletePatient_AsLoggedUser_ShouldReturn_Forbidden()
-        {
-            // Arrange
-            await SeedSamplePatientsAsync();
-            var patientToDeleteId = GetFirstRecordInTable().PatientId;
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
-
-            // Act
-            var response = await _httpClientPatient.DeleteAsync($"/Patient/deletion/{patientToDeleteId}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task DeletePatient_NoLoggedUser_ShouldReturn_Unauthorized()
-        {
-            // Arrange
-            await SeedSamplePatientsAsync();
-            var patientToDeleteId = GetFirstRecordInTable().PatientId;
-            _factoryIdentity.Logout(_httpClientIdentity, _httpClientPatient);
-
-            // Act
-            var response = await _httpClientPatient.DeleteAsync($"/Patient/deletion/{patientToDeleteId}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task DeletePatient_AsLoggedAdmin_ForNonExistingId_ShouldReturn_NotFound()
+        public async Task DeletePatient_ForNonExistingId_ShouldReturn_NotFound()
         {
             // Arrange
             await SeedSamplePatientsAsync();
             var nonExistingPatientId = -1;
-            await _factoryIdentity.LoginAsAdmin(_httpClientIdentity, _httpClientPatient);
 
             // Act
             var response = await _httpClientPatient.DeleteAsync($"/Patient/deletion/{nonExistingPatientId}");

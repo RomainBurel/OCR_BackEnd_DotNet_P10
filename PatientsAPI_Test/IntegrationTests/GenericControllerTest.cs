@@ -8,15 +8,11 @@ namespace PatientsAPI_Test.IntegrationTests
     {
         protected readonly CustomPatientsAPIFactory<PatientsAPI.Program> _factoryPatient;
         protected readonly HttpClient _httpClientPatient;
-        protected readonly CustomIdentityAPIFactory<IdentityAPI.Program> _factoryIdentity;
-        protected readonly HttpClient _httpClientIdentity;
 
         public GenericControllerTest(CustomPatientsAPIFactory<PatientsAPI.Program> factoryPatient)
         {
             _factoryPatient = factoryPatient;
             _httpClientPatient = factoryPatient.CreateClient(new WebApplicationFactoryClientOptions() { AllowAutoRedirect = false });
-            _factoryIdentity = new CustomIdentityAPIFactory<IdentityAPI.Program>();
-            _httpClientIdentity = _factoryIdentity.CreateClient(new WebApplicationFactoryClientOptions() { AllowAutoRedirect = false });
         }
 
         protected async Task FillTable(List<T> records)

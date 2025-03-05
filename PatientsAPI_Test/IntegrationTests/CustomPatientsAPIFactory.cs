@@ -38,6 +38,7 @@ namespace PatientsAPI_Test.IntegrationTests
                     options.UseInMemoryDatabase($"TestPatientsDB");
                 });
 
+                // Add FakPolicyEvaluator to by-pass controller Authorize attribute
                 services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
 
                 var sp = services.BuildServiceProvider();
