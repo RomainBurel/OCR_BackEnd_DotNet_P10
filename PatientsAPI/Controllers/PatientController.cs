@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PatientsAPI.Models;
+using PatientsAPI_SharedModels;
 using PatientsAPI.Services;
 
 namespace PatientsAPI.Controllers

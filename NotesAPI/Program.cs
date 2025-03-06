@@ -1,17 +1,27 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using PatientsAPI.Data;
-using PatientsAPI.Repositories;
-using PatientsAPI.Services;
+using MongoDB.Driver;
+using NotesAPI.Data;
+using NotesAPI.Domain;
+using NotesAPI.Models;
+using NotesAPI.Repositories;
+using NotesAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
 ConfigurationManager configuration = builder.Configuration;
 
-// Configuration de la base de données
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Configuration MongoDB
+builder.Services.Configure<NoteDatabaseSettings>(
+    configuration.GetSection("MongoDbSettings"));
+
+var mongoSettings = configuration.GetSection("MongoDbSettings");
+var client = new MongoClient(mongoSettings["ConnectionString"]);
+var database = client.GetDatabase(mongoSettings["DatabaseName"]);
+
+builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings["CollectionName"]));
 
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -26,14 +36,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = configuration["JwtSettings:Issuer"],
             ValidAudience = configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key)
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"ERREUR AUTHENTIFICATION : {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine("JWT REJETÉ : " + context.ErrorDescription);
+                return Task.CompletedTask;
+            },
+            OnMessageReceived = context =>
+            {
+                Console.WriteLine($"Token reçu : {context.Token}");
+                return Task.CompletedTask;
+            }
         };
     });
 
 builder.Services.AddAuthorization();
 
-// Ajout des contrôleurs et configuration Swagger
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson()
+    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -62,30 +92,28 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddScoped<DbContext, ApplicationDbContext>();
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IGenderRepository, GenderRepository>();
-builder.Services.AddScoped<IPatientService, PatientService>();
-builder.Services.AddScoped<IGenderService, GenderService>();
+builder.Services.AddSingleton<NoteDbContext>();
+builder.Services.AddScoped<INoteRepository, NoteRepository>();
+builder.Services.AddScoped<INoteService, NoteService>();
+builder.Services.AddSingleton<SeedData>();
 
 var app = builder.Build();
 
-// Activation de Swagger uniquement en mode développement
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<SeedData>();
+    await seeder.Seed();
+}
+
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Activation de l'authentification JWT
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-namespace PatientsAPI
-{
-    // Make the implicit Program class public so test projects can access it
-    public partial class Program { }
-}

@@ -1,4 +1,4 @@
-﻿using PatientsAPI.Models;
+﻿using PatientsAPI_SharedModels;
 
 namespace PatientsAPI.Services
 {

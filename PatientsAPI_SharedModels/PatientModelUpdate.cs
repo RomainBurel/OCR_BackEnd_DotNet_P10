@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FrontendMVC.Models
+namespace PatientsAPI_SharedModels
 {
     public class PatientModelUpdate
     {
-        public int PatientId { get; set; }
-
         [Required(ErrorMessage = "La saisie du nom du patient est obligatoire")]
         public string LastName { get; set; } = string.Empty;
 

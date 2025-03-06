@@ -1,6 +1,6 @@
 ﻿using PatientsAPI.Domain;
-using PatientsAPI.Models;
 using PatientsAPI.Repositories;
+using PatientsAPI_SharedModels;
 
 namespace PatientsAPI.Services
 {

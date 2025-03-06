@@ -15,4 +15,9 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NotesAPI_SharedModels\NotesAPI_SharedModels.csproj" />
+    <ProjectReference Include="..\PatientsAPI_SharedModels\PatientsAPI_SharedModels.csproj" />
+  </ItemGroup>
+
 </Project>

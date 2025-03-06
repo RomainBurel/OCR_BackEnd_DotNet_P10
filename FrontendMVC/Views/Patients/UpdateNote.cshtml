@@ -1,0 +1,16 @@
+﻿@model NotesAPI_SharedModels.NoteModelUpdate
+
+<h2>Modifier une Note</h2>
+
+<form asp-action="UpdateNote" method="post">
+    <input type="hidden" name="Id" value="@ViewBag.NoteId" />
+    <input type="hidden" name="PatientId" value="@ViewBag.PatientId" />
+
+    <div>
+        <label>Contenu</label>
+        <textarea asp-for="Content" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-controller="Patients" asp-action="Details" asp-route-patientId="@ViewBag.PatientId" class="btn btn-secondary">Annuler</a>
+</form>
