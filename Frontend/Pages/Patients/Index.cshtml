@@ -1,0 +1,28 @@
+﻿@page
+@model Frontend.Pages.Patients.IndexModel
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<h2>Patients</h2>
+
+<table>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Birth Date</th>
+        <th>Address</th>
+        <th>Phone</th>
+    </tr>
+    @foreach (var patient in Model.Patients)
+    {
+        <tr>
+            <td>@patient.FirstName</td>
+            <td>@patient.LastName</td>
+            <td>@patient.DateOfBirth.ToShortDateString()</td>
+            <td>@patient.Address</td>
+            <td>@patient.PhoneNumber</td>
+            <td><a href="/Patients/PatientDetails/@patient.PatientId">Voir Détails</a></td>
+        </tr>
+    }
+</table>

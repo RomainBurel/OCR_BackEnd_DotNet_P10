@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Accueil";
+}
+
+<h2>Bienvenue sur MediLabo</h2>
+
+<p>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a asp-controller="Account" asp-action="Login">Se connecter</a>
+    }
+    else
+    {
+        <a asp-controller="Patients" asp-action="Index">Voir la liste des patients</a>
+    }
+</p>
