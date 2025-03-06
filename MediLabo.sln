@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientsAPI_SharedModels", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesAPI_SharedModels", "NotesAPI_SharedModels\NotesAPI_SharedModels.csproj", "{5025B3DF-1559-45D0-B08C-1A52660C10C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabeteAPI", "DiabeteAPI\DiabeteAPI.csproj", "{0961B9F1-BF3E-4773-8A38-B29D6C9156A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabeteAPI_Test", "DiabeteAPI_Test\DiabeteAPI_Test.csproj", "{B4D96C0A-0531-404F-80F6-2EA313F35E7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{5025B3DF-1559-45D0-B08C-1A52660C10C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5025B3DF-1559-45D0-B08C-1A52660C10C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5025B3DF-1559-45D0-B08C-1A52660C10C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0961B9F1-BF3E-4773-8A38-B29D6C9156A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0961B9F1-BF3E-4773-8A38-B29D6C9156A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0961B9F1-BF3E-4773-8A38-B29D6C9156A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0961B9F1-BF3E-4773-8A38-B29D6C9156A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4D96C0A-0531-404F-80F6-2EA313F35E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D96C0A-0531-404F-80F6-2EA313F35E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D96C0A-0531-404F-80F6-2EA313F35E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D96C0A-0531-404F-80F6-2EA313F35E7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
