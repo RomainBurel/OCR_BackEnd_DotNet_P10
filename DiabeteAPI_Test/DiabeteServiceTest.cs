@@ -1,17 +1,38 @@
 ﻿using DiabeteAPI.Services;
+using Moq;
 using static DiabeteAPI.Services.DiabeteService;
 
 namespace DiabeteAPI_Test
 {
     public class DiabeteServiceTest
     {
-        private readonly DiabeteService _diabeteService;
+        private readonly IDiabeteService _diabeteService;
+        private readonly List<string> SearchedTriggers;
 
+        #region Constructor
         public DiabeteServiceTest()
         {
-            _diabeteService = new DiabeteService();
+            var httpMock = new Mock<HttpClient>();
+            _diabeteService = new DiabeteService(httpMock.Object);
+            SearchedTriggers = new List<string>
+                {
+                    "Hémoglobine A1C",
+                    "Microalbumine",
+                    "Taille",
+                    "Poids",
+                    "Fumeur",
+                    "Fumeuse",
+                    "Anormal",
+                    "Cholestérol",
+                    "Vertiges",
+                    "Rechute",
+                    "Réaction",
+                    "Anticorps"
+                };
         }
+        #endregion
 
+        #region GetDiabeteRisk
         [Fact]
         public void Patient_LessThanTwoTriggers_HasRiskNone()
         {
@@ -110,5 +131,94 @@ namespace DiabeteAPI_Test
             Assert.Equal(woman35Risk, expectedRisk);
             Assert.Equal(man35Risk, expectedRisk);
         }
+        #endregion
+
+        #region GetNbTriggers
+        [Fact]
+        public void GetNbTriggers_ZeroNotes_Returns_0()
+        {
+            var notes = new List<string>();
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 0;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+
+        [Fact]
+        public void GetNbTriggers_WithEmptyNote_1_Trigger_Returns_1()
+        {
+            var notes = new List<string> { "Première note", "Deuxième Note", "", SearchedTriggers[0] };
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 1;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+
+        [Fact]
+        public void GetNbTriggers_1_Trigger_Returns_1()
+        {
+            var notes = new List<string> { "Première note", "Deuxième Note", SearchedTriggers[0] };
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 1;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+
+        [Fact]
+        public void GetNbTriggers_1_Trigger_SeveralTimes_Returns_1()
+        {
+            var notes = new List<string> { SearchedTriggers[0], SearchedTriggers[0], SearchedTriggers[0] };
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 1;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+
+        [Fact]
+        public void GetNbTriggers_2_Triggers_Returns_2()
+        {
+            var notes = new List<string> { "Première note", SearchedTriggers[0], SearchedTriggers[1] };
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 2;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+
+        [Fact]
+        public void GetNbTriggers_1_TriggerUpperCase_Returns_1()
+        {
+            var notes = new List<string> { "Première note", SearchedTriggers[0].ToUpper() };
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 1;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+
+        [Fact]
+        public void GetNbTriggers_1_TriggerSeveralTimesWithSeveralCases_Returns_1()
+        {
+            var notes = new List<string> { SearchedTriggers[0], SearchedTriggers[0].ToUpper(), SearchedTriggers[0].ToLower() };
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 1;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+
+        [Fact]
+        public void GetNbTriggers_3_TriggerSeveralTimesWithSeveralCases_Returns_3()
+        {
+            var notes = new List<string>
+            { 
+                "Première Note",
+                SearchedTriggers[0], SearchedTriggers[0].ToUpper(), SearchedTriggers[0].ToLower(),
+                SearchedTriggers[1], SearchedTriggers[1].ToUpper(), SearchedTriggers[1].ToLower(),
+                SearchedTriggers[2], SearchedTriggers[2].ToUpper(), SearchedTriggers[2].ToLower()
+            };
+            int nbTriggers = _diabeteService.GetNbTriggers(notes);
+            int expectedNbTriggers = 3;
+
+            Assert.Equal(nbTriggers, expectedNbTriggers);
+        }
+        #endregion
     }
 }

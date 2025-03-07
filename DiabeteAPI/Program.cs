@@ -1,3 +1,5 @@
+using DiabeteAPI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+builder.Services.AddScoped<IDiabeteService, DiabeteService>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

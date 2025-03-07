@@ -1,4 +1,7 @@
-﻿namespace DiabeteAPI.Services
+﻿using NotesAPI_SharedModels;
+using PatientsAPI_SharedModels;
+
+namespace DiabeteAPI.Services
 {
     public class DiabeteService : IDiabeteService
     {
@@ -8,6 +11,59 @@
             BorderLine = 1,
             InDanger = 2,
             EarlyOnset = 3
+        }
+
+        private readonly HttpClient _httpClient;
+
+        private readonly List<string> SearchedTriggers;
+
+        public DiabeteService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+            SearchedTriggers = new List<string>
+                {
+                    "Hémoglobine A1C",
+                    "Microalbumine",
+                    "Taille",
+                    "Poids",
+                    "Fumeur",
+                    "Fumeuse",
+                    "Anormal",
+                    "Cholestérol",
+                    "Vertiges",
+                    "Rechute",
+                    "Réaction",
+                    "Anticorps"
+                };
+        }
+
+        private async Task<PatientModel?> GetPatient(int patientId)
+        {
+            var patient = await _httpClient.GetFromJsonAsync<PatientModel>($"https://localhost:7242/Patient/display/{patientId}");
+
+            return patient;
+        }
+
+        private async Task<List<string>> GetPatientNotesContent(int patientId)
+        {
+            var notes = await _httpClient.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7121/Notes/displayPatientNotes/{patientId}");
+            var patientNotesUCase = new List<string>();
+            if (notes != null)
+            {
+                patientNotesUCase = notes!.Select(n => n.Content).ToList();
+            }
+
+            return patientNotesUCase;
+        }
+
+        public int GetNbTriggers(List<string> patientNotesContent)
+        {
+            var triggersFound = new Dictionary<string, bool>();
+            SearchedTriggers.ForEach(t => {
+                triggersFound.Add(t, patientNotesContent.Any(n => n.Contains(t.ToUpper(), StringComparison.CurrentCultureIgnoreCase)));
+            });
+
+            return triggersFound.Count(t => t.Value);
         }
 
         public DiabeteRisk GetDiabeteRisk(int gender, int age, int nbTriggers)
