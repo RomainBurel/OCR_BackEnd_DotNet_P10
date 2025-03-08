@@ -1,5 +1,6 @@
 ﻿using NotesAPI_SharedModels;
 using PatientsAPI_SharedModels;
+using System.Net.Http.Headers;
 
 namespace DiabeteAPI.Services
 {
@@ -13,13 +14,20 @@ namespace DiabeteAPI.Services
             EarlyOnset = 3
         }
 
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClientPatients;
+        private readonly HttpClient _httpClientNotes;
+        private readonly IHttpClientFactory _httpClientFactoryPatientsAPI;
+        private readonly IHttpClientFactory _httpClientFactoryNotesAPI;
 
         private readonly List<string> SearchedTriggers;
 
-        public DiabeteService(HttpClient httpClient)
+        public DiabeteService(IHttpClientFactory httpClientFactoryPatientsAPI, IHttpClientFactory httpClientFactoryNotesAPI)
         {
-            _httpClient = httpClient;
+            _httpClientFactoryPatientsAPI = httpClientFactoryPatientsAPI;
+            _httpClientFactoryNotesAPI = httpClientFactoryNotesAPI;
+            _httpClientPatients = _httpClientFactoryPatientsAPI.CreateClient();
+            _httpClientNotes = _httpClientFactoryNotesAPI.CreateClient();
+
             SearchedTriggers = new List<string>
                 {
                     "Hémoglobine A1C",
@@ -37,16 +45,50 @@ namespace DiabeteAPI.Services
                 };
         }
 
+        public async Task<string> GetPatientDiabeteRiskReport(int patientId, string token)
+        {
+            _httpClientPatients.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _httpClientNotes.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var patient = await GetPatient(patientId);
+            var age = CalculateAge(patient.DateOfBirth);
+            var notesContent = await GetPatientNotesContent(patientId);
+            int nbTriggers = GetNbTriggers(notesContent);
+            var diabeteRisk = GetDiabeteRisk(patient.GenderId, age, nbTriggers);
+
+            string report;
+            switch (diabeteRisk)
+            {
+                case DiabeteRisk.None:
+                    report = "Aucun risque";
+                    break;
+                case DiabeteRisk.BorderLine:
+                    report = "Risque limité";
+                    break;
+                case DiabeteRisk.InDanger:
+                    report = "Danger";
+                    break;
+                case DiabeteRisk.EarlyOnset:
+                    report = "Apparition précoce";
+                    break;
+                default:
+                    report = "Risque inconnu";
+                    break;
+            }
+
+            return report;
+        }
+
         private async Task<PatientModel?> GetPatient(int patientId)
         {
-            var patient = await _httpClient.GetFromJsonAsync<PatientModel>($"https://localhost:7242/Patient/display/{patientId}");
+            var patient = await _httpClientPatients.GetFromJsonAsync<PatientModel>($"https://localhost:7242/Patient/display/{patientId}");
 
             return patient;
         }
 
         private async Task<List<string>> GetPatientNotesContent(int patientId)
         {
-            var notes = await _httpClient.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7121/Notes/displayPatientNotes/{patientId}");
+            var notes = await _httpClientNotes.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7121/Notes/displayPatientNotes/{patientId}");
             var patientNotesUCase = new List<string>();
             if (notes != null)
             {
@@ -54,6 +96,18 @@ namespace DiabeteAPI.Services
             }
 
             return patientNotesUCase;
+        }
+
+        private int CalculateAge(DateTime dateOfBirth)
+        {
+            var today = DateTime.Today;
+            var age = today.Year - dateOfBirth.Year;
+            if (dateOfBirth.Date > today.AddYears(-age))
+            {
+                age--;
+            };
+
+            return age;
         }
 
         public int GetNbTriggers(List<string> patientNotesContent)
@@ -68,19 +122,6 @@ namespace DiabeteAPI.Services
 
         public DiabeteRisk GetDiabeteRisk(int gender, int age, int nbTriggers)
         {
-            // Les règles pour déterminer les niveaux de risque sont les suivantes :
-            // ● aucun risque (None) : Le dossier du patient ne contient aucune note du médecin
-            //   contenant les déclencheurs(terminologie);
-            // ● risque limité (Borderline) : Le dossier du patient contient entre deux et cinq
-            //   déclencheurs et le patient est âgé de plus de 30 ans ;
-            // ● danger (In Danger) : Dépend de l'âge et du sexe du patient.
-            //   Si le patient est un homme de moins de 30 ans, alors trois termes déclencheurs doivent être présents.
-            //   Si le patient est une femme et a moins de 30 ans, il faudra quatre termes déclencheurs.
-            //   Si le patient a plus de 30 ans, alors il en faudra six ou sept ;
-            // ● apparition précoce (Early onset) : Encore une fois, cela dépend de l'âge et du sexe.
-            //   Si le patient est un homme de moins de 30 ans, alors au moins cinq termes déclencheurs sont nécessaires.
-            //   Si le patient est une femme et a moins de 30 ans, il faudra au moins sept termes déclencheurs.
-            //   Si le patient a plus de 30 ans, alors il en faudra huit ou plus
             if (age < 30)
             {
                 if (gender == 1)
