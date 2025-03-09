@@ -35,7 +35,8 @@ namespace FrontendMVC.Controllers
 
             var patient = await _httpClient.GetFromJsonAsync<PatientModel>($"https://localhost:7258/Patient/display/{id}");
             var notes = await _httpClient.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7258/Notes/displayPatientNotes/{id}");
-            var patientDetailsViewModel = new PatientDetailsViewModel { Patient = patient, Notes = notes };
+            var diabeteRiskReport = await _httpClient.GetStringAsync($"https://localhost:7258/Diabete/diabeteReport/{id}");
+            var patientDetailsViewModel = new PatientDetailsViewModel { Patient = patient, Notes = notes, DiabeteRiskReport = diabeteRiskReport };
 
             return View(patientDetailsViewModel);
         }
