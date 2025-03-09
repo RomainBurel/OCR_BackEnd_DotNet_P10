@@ -7,10 +7,10 @@
 <p>
     @if (User.Identity.IsAuthenticated)
     {
-        <a asp-controller="Account" asp-action="Login">Se connecter</a>
+        <a asp-controller="Patients" asp-action="Index">Voir la liste des patients</a>
     }
     else
     {
-        <a asp-controller="Patients" asp-action="Index">Voir la liste des patients</a>
+        <a asp-controller="Account" asp-action="Login">Se connecter</a>
     }
 </p>

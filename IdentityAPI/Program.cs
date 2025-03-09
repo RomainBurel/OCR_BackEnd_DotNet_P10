@@ -60,28 +60,29 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Please input JWT Token with Bearer like following : Bearer {token}",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference { Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen(options =>
+//{
+//    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+//    {
+//        BearerFormat = "JWT",
+//        In = ParameterLocation.Header,
+//        Description = "Please input JWT Token with Bearer like following : Bearer {token}",
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.Http,
+//        Scheme = JwtBearerDefaults.AuthenticationScheme
+//    });
+//    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+//    {
+//        {
+//            new OpenApiSecurityScheme
+//            {
+//                Reference = new OpenApiReference { Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme }
+//            },
+//            Array.Empty<string>()
+//        }
+//    });
+//});
 
 builder.Services.AddAuthorization();
 
