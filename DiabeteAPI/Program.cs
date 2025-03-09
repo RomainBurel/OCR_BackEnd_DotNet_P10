@@ -1,8 +1,7 @@
+using DiabeteAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using DiabeteAPI.Services;
 using System.Text;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -55,19 +54,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddHttpClient("PatientsAPI", (serviceProvider, client) =>
-{
-    client.BaseAddress = new Uri("https://localhost:7242");
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-    client.DefaultRequestHeaders.Add("User-Agent", "DiabeteAPI");
-});
-
-builder.Services.AddHttpClient("NotesAPI", (serviceProvider, client) =>
-{
-    client.BaseAddress = new Uri("https://localhost:7121");
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-    client.DefaultRequestHeaders.Add("User-Agent", "DiabeteAPI");
-});
+// Allow call to PatientsAPI and NotesAPI
+builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IDiabeteService, DiabeteService>();
 
@@ -81,7 +69,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Activation de l'authentification JWT
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
