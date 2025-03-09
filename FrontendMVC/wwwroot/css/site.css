@@ -29,3 +29,19 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.patient-detail {
+    width: 400px;
+}
+
+.patient-diabete-report {
+    width: 400px;
+}
+
+.patient-notes {
+    width: 400px;
+}
+
+.patient-notes-add {
+    width: 400px;
+}
