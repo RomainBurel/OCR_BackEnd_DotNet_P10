@@ -10,13 +10,15 @@
 }
 
 <form method="post">
-    <div>
-        <label>Nom d'utilisateur</label>
-        <input type="text" name="username" required />
-    </div>
-    <div>
-        <label>Mot de passe</label>
-        <input type="password" name="password" required />
-    </div>
+    <table>
+        <tr>
+            <td><label>Nom d'utilisateur</label></td>
+            <td><input type="text" name="username" required /></td>
+        </tr>
+        <tr>
+            <td><label>Mot de passe</label></td>
+            <td><input type="password" name="password" required /></td>
+        </tr>
+    </table>
     <button type="submit">Se connecter</button>
 </form>
