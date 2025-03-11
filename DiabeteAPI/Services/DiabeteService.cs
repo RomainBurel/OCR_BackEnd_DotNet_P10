@@ -88,7 +88,7 @@ namespace DiabeteAPI.Services
 
         private async Task<List<string>> GetPatientNotesContent(int patientId)
         {
-            var notes = await _httpClientNotes.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7121/Notes/displayPatientNotes/{patientId}");
+            var notes = await _httpClientNotes.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7148/Note/displayPatientNotes/{patientId}");
             var patientNotesUCase = new List<string>();
             if (notes != null)
             {

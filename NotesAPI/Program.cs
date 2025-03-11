@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
-using NotesAPI.Data;
 using NotesAPI.Domain;
 using NotesAPI.Models;
 using NotesAPI.Repositories;
@@ -9,19 +8,7 @@ using NotesAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
-
 ConfigurationManager configuration = builder.Configuration;
-
-// Configuration MongoDB
-builder.Services.Configure<NoteDatabaseSettings>(
-    configuration.GetSection("MongoDbSettings"));
-
-var mongoSettings = configuration.GetSection("MongoDbSettings");
-var client = new MongoClient(mongoSettings["ConnectionString"]);
-var database = client.GetDatabase(mongoSettings["DatabaseName"]);
-
-builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings["CollectionName"]));
 
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -36,34 +23,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = configuration["JwtSettings:Issuer"],
             ValidAudience = configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"ERREUR AUTHENTIFICATION : {context.Exception.Message}");
-                return Task.CompletedTask;
-            },
-            OnChallenge = context =>
-            {
-                Console.WriteLine("JWT REJETÉ : " + context.ErrorDescription);
-                return Task.CompletedTask;
-            },
-            OnMessageReceived = context =>
-            {
-                Console.WriteLine($"Token reçu : {context.Token}");
-                return Task.CompletedTask;
-            }
+            IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers().AddNewtonsoftJson()
-    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -92,23 +58,24 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddSingleton<NoteDbContext>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<INoteService, NoteService>();
-builder.Services.AddSingleton<SeedData>();
+
+builder.Services.Configure<NoteDatabaseSettings>(configuration.GetSection("MongoDbSettings"));
+
+var mongoSettings = configuration.GetSection("MongoDbSettings");
+var client = new MongoClient(mongoSettings["ConnectionString"]);
+var database = client.GetDatabase(mongoSettings["DatabaseName"]);
+
+builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings["CollectionName"]));
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    var seeder = scope.ServiceProvider.GetRequiredService<SeedData>();
-    await seeder.Seed();
 }
 
 app.UseHttpsRedirection();

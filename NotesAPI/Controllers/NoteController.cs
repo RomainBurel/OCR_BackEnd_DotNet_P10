@@ -1,28 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NotesAPI.Domain;
 using NotesAPI_SharedModels;
+using NotesAPI.Domain;
 using NotesAPI.Services;
 
 namespace NotesAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
-    public class NotesController : ControllerBase
+    [Authorize]
+    public class NoteController : Controller
     {
         private readonly INoteService _noteService;
 
-        public NotesController(INoteService noteService)
+        public NoteController(INoteService noteService)
         {
-            this._noteService = noteService;
+            _noteService = noteService;
         }
 
         [HttpGet]
         [Route("display/{noteId}")]
         public async Task<ActionResult<Note>> GetNote(string noteId)
         {
-            var note = await this._noteService.GetById(noteId);
+            var note = await _noteService.GetById(noteId);
             return Ok(note);
         }
 
@@ -32,7 +32,7 @@ namespace NotesAPI.Controllers
         {
             Console.WriteLine($"Utilisateur authentifié ? {User.Identity.IsAuthenticated}");
             Console.WriteLine($"Claims reçus : {string.Join(", ", User.Claims.Select(c => c.Type + " = " + c.Value))}");
-            var notes = await this._noteService.GetAllForAPatient(patientId);
+            var notes = await _noteService.GetAllForAPatient(patientId);
             return Ok(notes);
         }
 
@@ -42,7 +42,7 @@ namespace NotesAPI.Controllers
         {
             try
             {
-                await this._noteService.Add(note);
+                await _noteService.Add(note);
                 return Ok();
             }
             catch (Exception ex)
@@ -55,7 +55,7 @@ namespace NotesAPI.Controllers
         [Route("update/{noteId}")]
         public async Task<ActionResult<Note>> UpdateNote(string noteId)
         {
-            var note = await this._noteService.GetByIdForUpdate(noteId);
+            var note = await _noteService.GetByIdForUpdate(noteId);
             return Ok(note);
         }
 
@@ -65,7 +65,7 @@ namespace NotesAPI.Controllers
         {
             try
             {
-                await this._noteService.Update(noteId, note);
+                await _noteService.Update(noteId, note);
                 return Ok();
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace NotesAPI.Controllers
         {
             try
             {
-                await this._noteService.Delete(noteId);
+                await _noteService.Delete(noteId);
                 return Ok();
             }
             catch (Exception ex)
@@ -95,7 +95,7 @@ namespace NotesAPI.Controllers
         {
             try
             {
-                await this._noteService.DeleteAllForAPatient(patientId);
+                await _noteService.DeleteAllForAPatient(patientId);
                 return Ok();
             }
             catch (Exception ex)

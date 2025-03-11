@@ -45,14 +45,14 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/Notes/{everything}",
+      "UpstreamPathTemplate": "/Note/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "DownstreamPathTemplate": "/Notes/{everything}",
+      "DownstreamPathTemplate": "/Note/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7121
+          "Port": 7148
         }
       ],
       "AuthenticationOptions": {
