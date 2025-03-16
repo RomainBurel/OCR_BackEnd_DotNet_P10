@@ -64,7 +64,8 @@ namespace NotesAPI.Services
                 NoteId = note.NoteId, 
                 PatientId = note.PatientId,
                 Content = note.Content,
-                CreatedAt = note.CreatedAt
+                CreatedAt = note.CreatedAt,
+                UpdatedAt = note.UpdatedAt
             };
         }
 
@@ -78,11 +79,14 @@ namespace NotesAPI.Services
 
         private Note GetDataFromModelAdd(NoteModelAdd modelAdd)
         {
+            var creationDate = DateTime.Now;
+
             return new Note()
             {
                 PatientId = modelAdd.PatientId,
                 Content = modelAdd.Content,
-                CreatedAt = DateTime.Now
+                CreatedAt = creationDate,
+                UpdatedAt = creationDate
             };
         }
 
@@ -90,6 +94,7 @@ namespace NotesAPI.Services
         {
             var noteModel = await this._noteRepository.GetById(id);
             noteModel.Content = modelUpdate.Content;
+            noteModel.UpdatedAt = DateTime.Now;
             return noteModel;
         }
     }

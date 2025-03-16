@@ -10,11 +10,11 @@
         <h3>Informations</h3>
         @if (@Model.Patient.UpdatedAt != @Model.Patient.CreatedAt)
         {
-            <p>Fiche mise à jour le : @Model.Patient.UpdatedAt</p>
+            <p><small>Fiche mise à jour le : @Model.Patient.UpdatedAt</small></p>
         }
         else
         {
-            <p>Fiche créée le : @Model.Patient.CreatedAt</p>
+            <p><small>Fiche créée le : @Model.Patient.CreatedAt</small></p>
         }
         <table>
             <tr><th>Nom :</th><td>@Model.Patient.LastName</td></tr>
@@ -40,7 +40,14 @@
                 {
                     <li>
                         <p>@note.Content</p>
-                        <p><small>Ajouté le : @note.CreatedAt</small></p>
+                        @if (@note.UpdatedAt != note.CreatedAt)
+                        {
+                            <p><small>Modifié le : @note.UpdatedAt</small></p>
+                        }
+                        else
+                        {
+						    <p><small>Créé le : @note.CreatedAt</small></p>
+                        }
 
                         <a asp-controller="Patients" asp-action="UpdateNote" asp-route-noteId="@note.NoteId" asp-route-patientId="@Model.Patient.PatientId" class="btn btn-warning">
                             Modifier

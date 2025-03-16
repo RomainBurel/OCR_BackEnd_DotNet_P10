@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using NotesAPI.Data;
 using NotesAPI.Domain;
 using NotesAPI.Models;
 using NotesAPI.Repositories;
@@ -67,7 +68,9 @@ var mongoSettings = configuration.GetSection("MongoDbSettings");
 var client = new MongoClient(mongoSettings["ConnectionString"]);
 var database = client.GetDatabase(mongoSettings["DatabaseName"]);
 
+builder.Services.AddSingleton<NoteDbContext>();
 builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings["CollectionName"]));
+builder.Services.AddSingleton<SeedData>();
 
 var app = builder.Build();
 
@@ -76,6 +79,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<SeedData>();
+    await seeder.Seed();
 }
 
 app.UseHttpsRedirection();
