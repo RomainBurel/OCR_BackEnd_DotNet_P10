@@ -17,5 +17,8 @@ namespace NotesAPI.Domain
 
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime CreatedAt { get; set; }
+
+        [BsonRepresentation(BsonType.DateTime)]
+        public DateTime UpdatedAt { get; set; }
     }
 }

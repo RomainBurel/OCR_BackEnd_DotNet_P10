@@ -84,7 +84,7 @@ namespace FrontendMVC.Controllers
             return View(patient);
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Update([FromForm] int id, [FromForm] PatientModelUpdate patient)
         {
             var token = User.FindFirst("Token")?.Value;

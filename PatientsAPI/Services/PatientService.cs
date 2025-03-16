@@ -62,7 +62,9 @@ namespace PatientsAPI.Services
                 DateOfBirth = patient.DateOfBirth,
                 GenderId = patient.GenderId,
                 Address = patient.Address,
-                PhoneNumber = patient.PhoneNumber
+                PhoneNumber = patient.PhoneNumber,
+                CreatedAt = patient.CreatedAt,
+                UpdatedAt = patient.UpdatedAt
             };
         }
 
@@ -81,6 +83,7 @@ namespace PatientsAPI.Services
 
         private Patient GetDataFromModelAdd(PatientModelAdd modelAdd)
         {
+            var creationDate = DateTime.Now;
             return new Patient()
             {
                 FirstName = modelAdd.FirstName,
@@ -88,7 +91,9 @@ namespace PatientsAPI.Services
                 DateOfBirth = modelAdd.DateOfBirth,
                 GenderId = modelAdd.GenderId,
                 Address = modelAdd.Address,
-                PhoneNumber = modelAdd.PhoneNumber
+                PhoneNumber = modelAdd.PhoneNumber,
+                CreatedAt = creationDate,
+                UpdatedAt = creationDate
             };
         }
 
@@ -101,6 +106,7 @@ namespace PatientsAPI.Services
             patientModel.GenderId = modelUpdate.GenderId;
             patientModel.Address = modelUpdate.Address;
             patientModel.PhoneNumber = modelUpdate.PhoneNumber;
+            patientModel.UpdatedAt = DateTime.Now;
             return patientModel;
         }
     }

@@ -8,6 +8,14 @@
 <div class="d-flex flex-row justify-content-around">
     <div class="patient-detail">
         <h3>Informations</h3>
+        @if (@Model.Patient.UpdatedAt != @Model.Patient.CreatedAt)
+        {
+            <p>Fiche mise à jour le : @Model.Patient.UpdatedAt</p>
+        }
+        else
+        {
+            <p>Fiche créée le : @Model.Patient.CreatedAt</p>
+        }
         <table>
             <tr><th>Nom :</th><td>@Model.Patient.LastName</td></tr>
             <tr><th>Prénom :</th><td>@Model.Patient.FirstName</td></tr>
