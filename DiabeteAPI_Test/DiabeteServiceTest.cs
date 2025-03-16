@@ -62,7 +62,7 @@ namespace DiabeteAPI_Test
         }
 
         [Fact]
-        public void GetDiabeteRisk_TestCase3_ShouldReturn_RiskEarlyOnset()
+        public void GetDiabeteRisk_TestCase4_ShouldReturn_RiskEarlyOnset()
         {
             var woman22Risk = _diabeteService.GetDiabeteRisk(2, 22, 6);
             var expectedRisk = DiabeteRisk.EarlyOnset;
