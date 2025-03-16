@@ -1,0 +1,209 @@
+version: "3.9"
+
+services:
+  ################################################################
+  # IDENTITY API
+  ################################################################
+  identityapi:
+    build:
+      context: .
+      dockerfile: IdentityAPI/Dockerfile
+    container_name: identityapi
+    ports:
+      - "8081:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=Password123!;MultipleActiveResultSets=true;TrustServerCertificate=True;
+      - Jwt__Key=MediLaboSecretForAuthentication123456@!/*
+      - Jwt__Issuer=MediLaboIssuer
+      - Jwt__Audience=MediLaboAudience
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ./PatientsApi/appsettings.json:/app/appsettings.json
+      #- data-protection-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - sqlserver-identity
+    networks:
+      - reseau
+
+  ################################################################
+  # PATIENTS API
+  ################################################################
+  patientsapi:
+    build:
+      context: .
+      dockerfile: PatientsAPI/Dockerfile
+    container_name: patientsapi
+    ports:
+      - "8081:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver-patient,1433;Database=PatientsDb;User Id=sa;Password=Password123!;MultipleActiveResultSets=true;TrustServerCertificate=True;
+      - Jwt__Key=MediLaboSecretForAuthentication123456@!/*
+      - Jwt__Issuer=MediLaboIssuer
+      - Jwt__Audience=MediLaboAudience
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ./PatientsApi/appsettings.json:/app/appsettings.json
+      #- data-protection-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - sqlserver-patient
+      - sqlserver-identity
+      - identityapi
+    networks:
+      - reseau
+
+  ################################################################
+  # NOTES API
+  ################################################################
+  notesapi:
+    build:
+      context: .
+      dockerfile: NotesApi/Dockerfile
+    container_name: notesapi
+    ports:
+      - "8081:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MongoDbSettings__ConnectionString=mongodb-notes://mongodb:27017
+      - MongoDbSettings__DatabaseName=NotesDB
+      - MongoDbSettings__CollectionName=Notes
+      - Jwt__Key=MediLaboSecretForAuthentication123456@!/*
+      - Jwt__Issuer=MediLaboIssuer
+      - Jwt__Audience=MediLaboAudience
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ./NotesApi/appsettings.json:/app/appsettings.json
+      - data-protection-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - mongodb-notes
+      - sqlserver-identity
+      - identityapi
+    networks:
+      - reseau
+
+  ################################################################
+  # DIABETES API
+  ################################################################
+  diabeteapi:
+    build:
+      context: .
+      dockerfile: DiabeteAPI/Dockerfile
+    container_name: diabeteapi
+    ports:
+      - "8081:80" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=MediLaboSecretForAuthentication123456@!/*
+      - Jwt__Issuer=MediLaboIssuer
+      - Jwt__Audience=MediLaboAudience
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ./DiabeteAPI/appsettings.json:/app/appsettings.json
+      #- data-protection-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - patientsapi
+      - notesapi
+      - identityapi
+      - mongodb-notes
+      - sqlserver-identity
+      - sqlserver-patient
+    networks:
+      - reseau
+
+  ################################################################
+  # GATEWAY
+  ################################################################
+  gateway:
+    build:
+      context: .
+      dockerfile: Gateway/Dockerfile
+    container_name: gateway
+    ports:
+      - "8081:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=MediLaboSecretForAuthentication123456@!/*
+      - Jwt__Issuer=MediLaboIssuer
+      - Jwt__Audience=MediLaboAudience
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ./Gateway/appsettings.json:/app/appsettings.json
+      #- data-protection-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - patientsapi
+      - notesapi
+      - diabeteapi
+      - identityapi
+    networks:
+      - reseau
+
+  ################################################################
+  # FRONTEND
+  ################################################################
+  frontendmvc:
+    build:
+      context: .
+      dockerfile: FrontendMVC/Dockerfile
+    container_name: frontendmvc
+    ports:
+      - "7258:80"
+    depends_on:
+      - gateway
+    networks:
+      - reseau
+
+  ################################################################
+  # SQL SERVER PATIENT
+  ################################################################
+  sqlserver-patient:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-patient
+    environment:
+      - SA_PASSWORD=MySecureP@ssw0rd123!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - reseau
+
+  ################################################################
+  # SQL SERVER IDENTITY
+  ################################################################
+  sqlserver-identity:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-identity
+    environment:
+      - SA_PASSWORD=MySecureP@ssw0rd123!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1434:1434"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - reseau
+
+  ################################################################
+  # MONGODB
+  ################################################################
+  mongodb-notes:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - reseau
+
+networks:
+  reseau:
+    driver: bridge 
+    name: reseau
+
+volumes:
+  sql_data:
+  mongodb_data:
+  data-protection-keys:

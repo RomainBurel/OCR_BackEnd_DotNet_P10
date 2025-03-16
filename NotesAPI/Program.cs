@@ -84,7 +84,7 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<SeedData>();
-    await seeder.Seed();
+    //await seeder.Seed();
 }
 
 app.UseHttpsRedirection();

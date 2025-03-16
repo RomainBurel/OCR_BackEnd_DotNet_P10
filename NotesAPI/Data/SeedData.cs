@@ -14,7 +14,6 @@ namespace NotesAPI.Data
 
         public async Task Seed()
         {
-            await _context.Notes.DeleteManyAsync(n => true);
             if (await _context.Notes.CountDocumentsAsync<Note>(n => n.PatientId > 0) == 0)
             {
                 var notes = new List<Note>
