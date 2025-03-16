@@ -1,21 +1,18 @@
 ﻿using DiabeteAPI.Services;
-using Moq;
 using static DiabeteAPI.Services.DiabeteService;
 
 namespace DiabeteAPI_Test
 {
-    public class DiabeteServiceTest
+    public class DiabeteAlgoServiceTest
     {
-        private readonly IDiabeteService _diabeteService;
-        private readonly List<string> SearchedTriggers;
+        private readonly IDiabeteAlgoService _diabeteService;
+        private readonly List<string> _searchedTriggers;
 
         #region Constructor
-        public DiabeteServiceTest()
+        public DiabeteAlgoServiceTest()
         {
-            var httpClientFactoryPatientsMock = new Mock<IHttpClientFactory>();
-            var httpClientFactoryNotesMock = new Mock<IHttpClientFactory>();
-            _diabeteService = new DiabeteService(httpClientFactoryPatientsMock.Object, httpClientFactoryNotesMock.Object);
-            SearchedTriggers = new List<string>
+            _diabeteService = new DiabeteAlgoService();
+            _searchedTriggers = new List<string>
                 {
                     "Hémoglobine A1C",
                     "Microalbumine",
@@ -184,7 +181,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetNbTriggers_WithEmptyNote_1_Trigger_ShouldReturn_1()
         {
-            var notes = new List<string> { "Première note", "Deuxième Note", "", SearchedTriggers[0] };
+            var notes = new List<string> { "Première note", "Deuxième Note", "", _searchedTriggers[0] };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
             int expectedNbTriggers = 1;
 
@@ -194,7 +191,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetNbTriggers_1_Trigger_ShouldReturn_1()
         {
-            var notes = new List<string> { "Première note", "Deuxième Note", SearchedTriggers[0] };
+            var notes = new List<string> { "Première note", "Deuxième Note", _searchedTriggers[0] };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
             int expectedNbTriggers = 1;
 
@@ -204,7 +201,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetNbTriggers_1_Trigger_SeveralTimes_ShouldReturn_1()
         {
-            var notes = new List<string> { SearchedTriggers[0], SearchedTriggers[0], SearchedTriggers[0] };
+            var notes = new List<string> { _searchedTriggers[0], _searchedTriggers[0], _searchedTriggers[0] };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
             int expectedNbTriggers = 1;
 
@@ -214,7 +211,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetNbTriggers_2_Triggers_ShouldReturn_2()
         {
-            var notes = new List<string> { "Première note", SearchedTriggers[0], SearchedTriggers[1] };
+            var notes = new List<string> { "Première note", _searchedTriggers[0], _searchedTriggers[1] };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
             int expectedNbTriggers = 2;
 
@@ -224,7 +221,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetNbTriggers_1_TriggerUpperCase_ShouldReturn_1()
         {
-            var notes = new List<string> { "Première note", SearchedTriggers[0].ToUpper() };
+            var notes = new List<string> { "Première note", _searchedTriggers[0].ToUpper() };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
             int expectedNbTriggers = 1;
 
@@ -234,7 +231,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetNbTriggers_1_TriggerSeveralTimesWithSeveralCases_ShouldReturn_1()
         {
-            var notes = new List<string> { SearchedTriggers[0], SearchedTriggers[0].ToUpper(), SearchedTriggers[0].ToLower() };
+            var notes = new List<string> { _searchedTriggers[0], _searchedTriggers[0].ToUpper(), _searchedTriggers[0].ToLower() };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
             int expectedNbTriggers = 1;
 
@@ -245,11 +242,11 @@ namespace DiabeteAPI_Test
         public void GetNbTriggers_3_TriggerSeveralTimesWithSeveralCases_ShouldReturn_3()
         {
             var notes = new List<string>
-            { 
+            {
                 "Première Note",
-                SearchedTriggers[0], SearchedTriggers[0].ToUpper(), SearchedTriggers[0].ToLower(),
-                SearchedTriggers[1], SearchedTriggers[1].ToUpper(), SearchedTriggers[1].ToLower(),
-                SearchedTriggers[2], SearchedTriggers[2].ToUpper(), SearchedTriggers[2].ToLower()
+                _searchedTriggers[0], _searchedTriggers[0].ToUpper(), _searchedTriggers[0].ToLower(),
+                _searchedTriggers[1], _searchedTriggers[1].ToUpper(), _searchedTriggers[1].ToLower(),
+                _searchedTriggers[2], _searchedTriggers[2].ToUpper(), _searchedTriggers[2].ToLower()
             };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
             int expectedNbTriggers = 3;

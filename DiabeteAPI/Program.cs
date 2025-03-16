@@ -58,6 +58,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IDiabeteService, DiabeteService>();
+builder.Services.AddScoped<IDiabeteAlgoService, DiabeteAlgoService>();
+builder.Services.AddScoped<IDiabeteDataService, DiabeteDataService>();
 
 var app = builder.Build();
 
