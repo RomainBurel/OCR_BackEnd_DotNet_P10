@@ -34,7 +34,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_TestCase1_ShouldReturn_RiskNone()
         {
-            var woman58Risk = _diabeteService.GetDiabeteRisk(2, 58, 1);
+            var woman58Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 58, 1);
             var expectedRisk = DiabeteRisk.None;
 
             Assert.Equal(expectedRisk, woman58Risk);
@@ -43,7 +43,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_TestCase2_ShouldReturn_RiskBorderLine()
         {
-            var man79Risk = _diabeteService.GetDiabeteRisk(1, 79, 2);
+            var man79Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 79, 2);
             var expectedRisk = DiabeteRisk.BorderLine;
 
             Assert.Equal(expectedRisk, man79Risk);
@@ -52,7 +52,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_TestCase3_ShouldReturn_RiskInDanger()
         {
-            var man20Risk = _diabeteService.GetDiabeteRisk(1, 20, 3);
+            var man20Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 20, 3);
             var expectedRisk = DiabeteRisk.InDanger;
 
             Assert.Equal(expectedRisk, man20Risk);
@@ -61,7 +61,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_TestCase4_ShouldReturn_RiskEarlyOnset()
         {
-            var woman22Risk = _diabeteService.GetDiabeteRisk(2, 22, 6);
+            var woman22Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 22, 6);
             var expectedRisk = DiabeteRisk.EarlyOnset;
 
             Assert.Equal(expectedRisk, woman22Risk);
@@ -70,12 +70,12 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Patient_LessThanTwoTriggers_HasRiskNone()
         {
-            var woman25Risk = _diabeteService.GetDiabeteRisk(2, 25, 1);
-            var woman30Risk = _diabeteService.GetDiabeteRisk(2, 25, 0);
-            var woman35Risk = _diabeteService.GetDiabeteRisk(2, 35, 1);
-            var man25Risk = _diabeteService.GetDiabeteRisk(1, 25, 1);
-            var man30Risk = _diabeteService.GetDiabeteRisk(1, 25, 0);
-            var man35Risk = _diabeteService.GetDiabeteRisk(1, 35, 1);
+            var woman25Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 25, 1);
+            var woman30Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 25, 0);
+            var woman35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 35, 1);
+            var man25Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 25, 1);
+            var man30Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 25, 0);
+            var man35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 35, 1);
             var expectedRisk = DiabeteRisk.None;
 
             Assert.Equal(expectedRisk, woman25Risk);
@@ -89,8 +89,8 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Patient_Over30_FiveTriggers_ShouldReturn_Borderline()
         {
-            var woman35Risk = _diabeteService.GetDiabeteRisk(2, 35, 5);
-            var man35Risk = _diabeteService.GetDiabeteRisk(1, 35, 5);
+            var woman35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 35, 5);
+            var man35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 35, 5);
             var expectedRisk = DiabeteRisk.BorderLine;
 
             Assert.Equal(expectedRisk, woman35Risk);
@@ -100,7 +100,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Man_Under30_ThreeTriggers_ShouldReturn_InDanger()
         {
-            var man25Risk = _diabeteService.GetDiabeteRisk(1, 25, 3);
+            var man25Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 25, 3);
             var expectedRisk = DiabeteRisk.InDanger;
 
             Assert.Equal(expectedRisk, man25Risk);
@@ -109,7 +109,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Woman_Under30_FourTriggers_ShouldReturn_InDanger()
         {
-            var woman25Risk = _diabeteService.GetDiabeteRisk(2, 25, 4);
+            var woman25Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 25, 4);
             var expectedRisk = DiabeteRisk.InDanger;
 
             Assert.Equal(expectedRisk, woman25Risk);
@@ -118,8 +118,8 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Patient_Over30_SixTriggers_ShouldReturn_InDanger()
         {
-            var woman35Risk = _diabeteService.GetDiabeteRisk(2, 35, 6);
-            var man35Risk = _diabeteService.GetDiabeteRisk(1, 35, 6);
+            var woman35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 35, 6);
+            var man35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 35, 6);
             var expectedRisk = DiabeteRisk.InDanger;
 
             Assert.Equal(expectedRisk, woman35Risk);
@@ -129,8 +129,8 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Patient_Over30_SevenTriggers_ShouldReturn_InDanger()
         {
-            var woman35Risk = _diabeteService.GetDiabeteRisk(2, 35, 7);
-            var man35Risk = _diabeteService.GetDiabeteRisk(1, 35, 7);
+            var woman35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 35, 7);
+            var man35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 35, 7);
             var expectedRisk = DiabeteRisk.InDanger;
 
             Assert.Equal(expectedRisk, woman35Risk);
@@ -140,7 +140,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Man_Under30_FiveTriggers_ShouldReturn_EarlyOnset()
         {
-            var man25Risk = _diabeteService.GetDiabeteRisk(1, 25, 5);
+            var man25Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 25, 5);
             var expectedRisk = DiabeteRisk.EarlyOnset;
 
             Assert.Equal(expectedRisk, man25Risk);
@@ -149,7 +149,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Woman_Under30_SevenTriggers_ShouldReturn_EarlyOnset()
         {
-            var woman25Risk = _diabeteService.GetDiabeteRisk(2, 25, 7);
+            var woman25Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 25, 7);
             var expectedRisk = DiabeteRisk.EarlyOnset;
 
             Assert.Equal(expectedRisk, woman25Risk);
@@ -158,8 +158,8 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_Patient_Over30_HeightTriggers_ShouldReturn_EarlyOnset()
         {
-            var woman35Risk = _diabeteService.GetDiabeteRisk(2, 35, 8);
-            var man35Risk = _diabeteService.GetDiabeteRisk(1, 35, 8);
+            var woman35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 35, 8);
+            var man35Risk = _diabeteService.GetDiabeteRisk(PatientGender.Male, 35, 8);
             var expectedRisk = DiabeteRisk.EarlyOnset;
 
             Assert.Equal(expectedRisk, woman35Risk);

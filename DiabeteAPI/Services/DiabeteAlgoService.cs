@@ -2,6 +2,13 @@
 
 namespace DiabeteAPI.Services
 {
+    public enum PatientGender
+    {
+        Male = 1,
+        Female = 2,
+        Other
+    }
+
     public class DiabeteAlgoService : IDiabeteAlgoService
     {
         private readonly List<string> SearchedTriggers;
@@ -47,11 +54,16 @@ namespace DiabeteAPI.Services
             return triggersFound.Count(t => t.Value);
         }
 
-        public DiabeteRisk GetDiabeteRisk(int gender, int age, int nbTriggers)
+        public DiabeteRisk GetDiabeteRisk(PatientGender gender, int age, int nbTriggers)
         {
+            if (gender == PatientGender.Other)
+            {
+                throw new NotImplementedException($"Diabete risk calculation is not implemented yet for patient gender other than male or female");
+            }
+
             if (age < 30)
             {
-                if (gender == 1)
+                if (gender == PatientGender.Male)
                 {
                     if (nbTriggers >= 3 && nbTriggers <= 4) return DiabeteRisk.InDanger;
                     if (nbTriggers >= 5) return DiabeteRisk.EarlyOnset;

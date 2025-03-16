@@ -25,7 +25,7 @@
             var age = _diabeteAlgoService.CalculateAge(patient.DateOfBirth);
             var notesContent = await _diabeteDataService.GetPatientNotesContent(patientId, token);
             int nbTriggers = _diabeteAlgoService.GetNbTriggers(notesContent);
-            var diabeteRisk = _diabeteAlgoService.GetDiabeteRisk(patient.GenderId, age, nbTriggers);
+            var diabeteRisk = _diabeteAlgoService.GetDiabeteRisk((PatientGender)patient.GenderId, age, nbTriggers);
 
             string report;
             switch (diabeteRisk)

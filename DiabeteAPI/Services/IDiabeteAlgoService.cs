@@ -4,7 +4,7 @@ namespace DiabeteAPI.Services
 {
     public interface IDiabeteAlgoService
     {
-        public DiabeteRisk GetDiabeteRisk(int gender, int age, int nbTriggers);
+        public DiabeteRisk GetDiabeteRisk(PatientGender gender, int age, int nbTriggers);
 
         public int GetNbTriggers(List<string> patientNotesContent);
 
