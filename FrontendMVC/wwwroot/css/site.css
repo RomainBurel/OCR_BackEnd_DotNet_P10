@@ -30,18 +30,54 @@ body {
   text-align: start;
 }
 
+.patients-list tr th {
+    border-style: solid;
+    border-width: thin;
+    padding: 2px;
+    text-align: center;
+}
+
+.patients-list tr td {
+    border-style: solid;
+    border-width: thin;
+    padding: 2px;
+}
+
 .patient-detail {
-    width: 400px;
+    width: 500px;
+    padding: 5px;
+    border-style: solid;
+    border-color: lightskyblue;
+    border-radius: 15px;
 }
 
 .patient-diabete-report {
-    width: 400px;
+    width: 500px;
+    padding: 5px;
+    border-style: solid;
+    border-color: lightskyblue;
+    border-radius: 15px;
 }
 
 .patient-notes {
-    width: 400px;
+    width: 500px;
+    max-height: 400px;
+    overflow-y: scroll;
+    padding: 5px;
+    border-style: solid;
+    border-color: lightskyblue;
+    border-radius: 15px;
 }
 
 .patient-notes-add {
-    width: 400px;
+    width: 500px;
+    max-height: 230px;
+    padding: 5px;
+    border-style: solid;
+    border-color: lightskyblue;
+    border-radius: 15px;
+}
+
+.new-note-content {
+    width: 480px;
 }
