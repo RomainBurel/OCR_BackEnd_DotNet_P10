@@ -77,6 +77,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.EnsureCreated(); // Crée la base si elle n'existe pas
+}
+
 app.UseHttpsRedirection();
 app.UseAuthentication(); // Activation de l'authentification JWT
 app.UseAuthorization();

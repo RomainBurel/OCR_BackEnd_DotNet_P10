@@ -23,7 +23,7 @@
             [HttpPost]
             public async Task<IActionResult> Login(string username, string password)
             {
-                var response = await this._httpClient.PostAsJsonAsync("https://localhost:7258/Authorization/login", new { username, password });
+                var response = await this._httpClient.PostAsJsonAsync("http://gateway/Authorization/login", new { username, password });
 
                 if (!response.IsSuccessStatusCode)
                 {

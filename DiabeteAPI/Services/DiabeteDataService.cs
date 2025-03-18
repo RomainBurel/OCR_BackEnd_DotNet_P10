@@ -22,7 +22,7 @@ namespace DiabeteAPI.Services
         public async Task<PatientModel?> GetPatient(int patientId, string token)
         {
             _httpClientPatients.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var patient = await _httpClientPatients.GetFromJsonAsync<PatientModel>($"https://localhost:7242/Patient/display/{patientId}");
+            var patient = await _httpClientPatients.GetFromJsonAsync<PatientModel>($"http://patientsapi/Patient/display/{patientId}");
 
             return patient;
         }
@@ -30,7 +30,7 @@ namespace DiabeteAPI.Services
         public async Task<List<string>> GetPatientNotesContent(int patientId, string token)
         {
             _httpClientNotes.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var notes = await _httpClientNotes.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7148/Note/displayPatientNotes/{patientId}");
+            var notes = await _httpClientNotes.GetFromJsonAsync<List<NoteModel>>($"http://notesapi/Note/displayPatientNotes/{patientId}");
             var patientNotesUCase = new List<string>();
             if (notes != null)
             {

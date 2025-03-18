@@ -64,12 +64,12 @@ builder.Services.AddScoped<INoteService, NoteService>();
 
 builder.Services.Configure<NoteDatabaseSettings>(configuration.GetSection("MongoDbSettings"));
 
-var mongoSettings = configuration.GetSection("MongoDbSettings");
-var client = new MongoClient(mongoSettings["ConnectionString"]);
-var database = client.GetDatabase(mongoSettings["DatabaseName"]);
+var mongoSettings = configuration.GetSection("MongoDbSettings").Get<NoteDatabaseSettings>();
+var client = new MongoClient(mongoSettings.ConnectionString);
+var database = client.GetDatabase(mongoSettings.DatabaseName);
 
 builder.Services.AddSingleton<NoteDbContext>();
-builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings["CollectionName"]));
+builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings.ConnectionString));
 builder.Services.AddSingleton<SeedData>();
 
 var app = builder.Build();
@@ -83,8 +83,19 @@ if (app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
+    var collections = database.ListCollectionNames().ToList();
+    if (!collections.Contains(mongoSettings.CollectionName))
+    {
+        database.CreateCollection(mongoSettings.CollectionName);
+        Console.WriteLine($"Collection '{mongoSettings.CollectionName}' créée !");
+    }
+    else
+    {
+        Console.WriteLine($"Collection '{mongoSettings.CollectionName}' existe déjà !");
+    }
+
     var seeder = scope.ServiceProvider.GetRequiredService<SeedData>();
-    //await seeder.Seed();
+    await seeder.Seed();
 }
 
 app.UseHttpsRedirection();

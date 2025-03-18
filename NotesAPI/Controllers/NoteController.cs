@@ -11,11 +11,13 @@ namespace NotesAPI.Controllers
     [Authorize]
     public class NoteController : Controller
     {
+        private readonly ILogger<NoteController> _logger;
         private readonly INoteService _noteService;
 
-        public NoteController(INoteService noteService)
+        public NoteController(INoteService noteService, ILogger<NoteController> logger)
         {
             _noteService = noteService;
+            _logger = logger;
         }
 
         [HttpGet]
