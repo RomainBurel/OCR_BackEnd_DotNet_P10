@@ -16,7 +16,8 @@ var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:7233"; // L'URL de IdentityAPI
+        options.Authority = "http://identityapi";
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
