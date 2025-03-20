@@ -10,19 +10,22 @@ namespace DiabeteAPI.Services
         private readonly HttpClient _httpClientNotes;
         private readonly IHttpClientFactory _httpClientFactoryPatientsAPI;
         private readonly IHttpClientFactory _httpClientFactoryNotesAPI;
+        private readonly IConfiguration _configuration;
 
-        public DiabeteDataService(IHttpClientFactory httpClientFactoryPatientsAPI, IHttpClientFactory httpClientFactoryNotesAPI)
+        public DiabeteDataService(IHttpClientFactory httpClientFactoryPatientsAPI, IHttpClientFactory httpClientFactoryNotesAPI, IConfiguration configuration)
         {
             _httpClientFactoryPatientsAPI = httpClientFactoryPatientsAPI;
             _httpClientFactoryNotesAPI = httpClientFactoryNotesAPI;
             _httpClientPatients = _httpClientFactoryPatientsAPI.CreateClient();
             _httpClientNotes = _httpClientFactoryNotesAPI.CreateClient();
+            _configuration = configuration;
         }
 
         public async Task<PatientModel?> GetPatient(int patientId, string token)
         {
             _httpClientPatients.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var patient = await _httpClientPatients.GetFromJsonAsync<PatientModel>($"http://patientsapi/Patient/display/{patientId}");
+            var patientsApiUrl = _configuration["ApiURLs:patientsApiURL"];
+            var patient = await _httpClientPatients.GetFromJsonAsync<PatientModel>($"{patientsApiUrl}/Patient/display/{patientId}");
 
             return patient;
         }
@@ -30,7 +33,8 @@ namespace DiabeteAPI.Services
         public async Task<List<string>> GetPatientNotesContent(int patientId, string token)
         {
             _httpClientNotes.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var notes = await _httpClientNotes.GetFromJsonAsync<List<NoteModel>>($"http://notesapi/Note/displayPatientNotes/{patientId}");
+            var notesApiUrl = _configuration["ApiURLs:notesApiURL"];
+            var notes = await _httpClientNotes.GetFromJsonAsync<List<NoteModel>>($"{notesApiUrl}/Note/displayPatientNotes/{patientId}");
             var patientNotesUCase = new List<string>();
             if (notes != null)
             {

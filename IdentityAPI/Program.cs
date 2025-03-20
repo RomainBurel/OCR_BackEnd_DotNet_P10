@@ -1,15 +1,22 @@
+using IdentityAPI.Data;
+using IdentityAPI.Domain;
+using IdentityAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using IdentityAPI.Data;
-using IdentityAPI.Domain;
-using Microsoft.OpenApi.Models;
-using IdentityAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
+}
 ConfigurationManager configuration = builder.Configuration;
+
+var ConnectionString = builder.Configuration["ConnectionStrings:DefaultConnection"] ?? "NOT FOUND";
+Console.WriteLine($"Chaine de connexion détectée : {ConnectionString}");
 
 // Configuration de la base de données
 builder.Services.AddDbContext<IdentityDbContext>(options =>

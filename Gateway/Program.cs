@@ -5,9 +5,14 @@ using Ocelot.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Chargement de la configuration Ocelot
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
+    builder.Configuration.AddJsonFile("ocelot.Docker.json", optional: false, reloadOnChange: true);
+}
+
 ConfigurationManager configuration = builder.Configuration;
 
 // Récupération de la clé secrète (doit être la même que IdentityAPI)
@@ -16,7 +21,7 @@ var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "http://identityapi";
+        options.Authority = configuration["ApiURLs:identityApiURL"];
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {

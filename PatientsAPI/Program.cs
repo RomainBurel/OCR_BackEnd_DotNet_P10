@@ -7,7 +7,15 @@ using PatientsAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
+}
 ConfigurationManager configuration = builder.Configuration;
+
+var ConnectionString = builder.Configuration["ConnectionStrings:DefaultConnection"] ?? "NOT FOUND";
+Console.WriteLine($"Chaine de connexion détectée : {ConnectionString}");
 
 // Configuration de la base de données
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -17,7 +25,7 @@ var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "http://identityapi";
+        options.Authority = configuration["ApiURLs:identityApiURL"];
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {

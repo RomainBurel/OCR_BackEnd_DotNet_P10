@@ -9,13 +9,21 @@ using NotesAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
+}
 ConfigurationManager configuration = builder.Configuration;
+
+var ConnectionString = builder.Configuration["MongoDbSettings:ConnectionString"] ?? "NOT FOUND";
+Console.WriteLine($"Chaine de connexion détectée : {ConnectionString}");
 
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "http://identityapi";
+        options.Authority = configuration["ApiURLs:identityApiURL"];
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {

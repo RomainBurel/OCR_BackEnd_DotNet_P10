@@ -4,11 +4,11 @@
       "UpstreamPathTemplate": "/Authorization/{everything}",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/Authorization/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7233
+          "Host": "identityapi",
+          "Port": 80
         }
       ]
     },
@@ -16,11 +16,11 @@
       "UpstreamPathTemplate": "/Patient/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "DownstreamPathTemplate": "/Patient/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7242
+          "Host": "patientsapi",
+          "Port": 80
         }
       ],
       "AuthenticationOptions": {
@@ -32,11 +32,11 @@
       "UpstreamPathTemplate": "/Gender/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/Gender/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7242
+          "Host": "patientsapi",
+          "Port": 80
         }
       ],
       "AuthenticationOptions": {
@@ -48,11 +48,11 @@
       "UpstreamPathTemplate": "/Note/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "DownstreamPathTemplate": "/Note/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7148
+          "Host": "notesapi",
+          "Port": 80
         }
       ],
       "AuthenticationOptions": {
@@ -64,11 +64,11 @@
       "UpstreamPathTemplate": "/Diabete/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/Diabete/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7246
+          "Host": "diabeteapi",
+          "Port": 80
         }
       ],
       "AuthenticationOptions": {
@@ -78,6 +78,6 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:7258"
+    "BaseUrl": "http://gateway"
   }
 }

@@ -65,6 +65,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - sqlidentityvolume:/data/db
+      - ./IdentityAPI/appsettings.Docker.json:/app/appsettings.Docker.json
     depends_on:
       - sqlserver-identity
     networks:
@@ -89,6 +90,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./PatientsApi/appsettings.json:/app/appsettings.json
+      - ./PatientsApi/appsettings.Docker.json:/app/appsettings.Docker.json
     depends_on:
       - sqlserver-patient
       - identityapi
@@ -116,6 +118,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./NotesApi/appsettings.json:/app/appsettings.json
+      - ./NotesAPI/appsettings.Docker.json:/app/appsettings.Docker.json
     depends_on:
       - mongodb-notes
       - identityapi
@@ -140,6 +143,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./DiabeteAPI/appsettings.json:/app/appsettings.json
+      - ./DiabeteAPI/appsettings.Docker.json:/app/appsettings.Docker.json
     depends_on:
       - patientsapi
       - notesapi
@@ -164,6 +168,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Gateway/appsettings.json:/app/appsettings.json
+      - ./Gateway/appsettings.Docker.json:/app/appsettings.Docker.json
     depends_on:
       - patientsapi
       - notesapi
@@ -185,6 +190,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ./FrontendMVC/appsettings.json:/app/appsettings.json
+      - ./FrontendMVC/appsettings.Docker.json:/app/appsettings.Docker.json
     depends_on:
       - gateway
     networks:

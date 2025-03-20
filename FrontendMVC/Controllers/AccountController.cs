@@ -12,10 +12,12 @@
         public class AccountController : Controller
         {
             private readonly HttpClient _httpClient;
+            private readonly string _gatewayUrl;
 
-            public AccountController(HttpClient httpClient)
+            public AccountController(HttpClient httpClient, IConfiguration configuration)
             {
                 _httpClient = httpClient;
+                _gatewayUrl = configuration["ApiURLs:gatewayURL"];
             }
 
             public IActionResult Login() => View();
@@ -23,7 +25,7 @@
             [HttpPost]
             public async Task<IActionResult> Login(string username, string password)
             {
-                var response = await this._httpClient.PostAsJsonAsync("http://gateway/Authorization/login", new { username, password });
+                var response = await this._httpClient.PostAsJsonAsync($"{_gatewayUrl}/Authorization/login", new { username, password });
 
                 if (!response.IsSuccessStatusCode)
                 {
