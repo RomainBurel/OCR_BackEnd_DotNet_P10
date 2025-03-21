@@ -4,7 +4,7 @@
 
 <form asp-action="Update" method="post">
     <input type="hidden" name="Id" value="@ViewBag.PatientId" />
-    <table>
+    <table class="patient-update">
         <tr>
             <td><label>Prénom</label></td>
             <td><input asp-for="FirstName" required /></td>
@@ -37,7 +37,10 @@
 			<td><input asp-for="PhoneNumber" /></td>
         </tr>
     </table>
-    <button type="submit" class="btn btn-success">Enregistrer</button>
+    <table>
+        <tr>
+            <td><button type="submit" class="btn btn-success">Enregistrer</button></td>
+            <td><a asp-controller="Patients" asp-action="Index" class="btn btn-secondary">Annuler</a></td>
+        </tr>
+    </table>
 </form>
-
-<a asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>

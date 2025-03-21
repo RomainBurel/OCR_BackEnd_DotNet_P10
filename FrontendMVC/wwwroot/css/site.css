@@ -43,6 +43,12 @@ body {
     padding: 2px;
 }
 
+.patient-update tr td {
+    border-style: solid;
+    border-width: thin;
+    padding: 2px;
+}
+
 .patient-detail {
     width: 500px;
     padding: 5px;
@@ -76,6 +82,18 @@ body {
     border-style: solid;
     border-color: lightskyblue;
     border-radius: 15px;
+}
+
+.note-view {
+    width: 460px;
+    padding: 5px;
+    border-style: solid;
+    border-color: lightskyblue;
+    border-radius: 5px;
+}
+
+.note {
+    width: 440px;
 }
 
 .new-note-content {

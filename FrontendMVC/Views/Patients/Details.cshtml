@@ -35,34 +35,33 @@
         <h3>Notes Médicales</h3>
         @if (Model.Notes.Any())
         {
-            <ul>
-                @foreach (var note in Model.Notes)
-                {
-                    <li>
-                        <p>@note.Content</p>
-                        @if (@note.UpdatedAt != note.CreatedAt)
-                        {
-                            <p><small>Modifié le : @note.UpdatedAt</small></p>
-                        }
-                        else
-                        {
-						    <p><small>Créé le : @note.CreatedAt</small></p>
-                        }
+            @foreach (var note in Model.Notes)
+            {
+                <div class="note-view">
+                    @if (@note.UpdatedAt != note.CreatedAt)
+                    {
+                        <p><small>Modifié le : @note.UpdatedAt</small></p>
+                    }
+                    else
+                    {
+					    <p><small>Créé le : @note.CreatedAt</small></p>
+                    }
+                    <textarea class="note" readonly rows="5">@note.Content</textarea>
 
-                        <a asp-controller="Patients" asp-action="UpdateNote" asp-route-noteId="@note.NoteId" asp-route-patientId="@Model.Patient.PatientId" class="btn btn-warning">
-                            Modifier
-                        </a>
+                    <a asp-controller="Patients" asp-action="UpdateNote" asp-route-noteId="@note.NoteId" asp-route-patientId="@Model.Patient.PatientId" class="btn btn-warning">
+                        Modifier
+                    </a>
 
-                        <form asp-controller="Patients" asp-action="DeleteNote" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@note.NoteId" />
-                            <input type="hidden" name="patientId" value="@Model.Patient.PatientId" />
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette note ?');">
-                                Supprimer
-                            </button>
-                        </form>
-                    </li>
-                }
-            </ul>
+                    <form asp-controller="Patients" asp-action="DeleteNote" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@note.NoteId" />
+                        <input type="hidden" name="patientId" value="@Model.Patient.PatientId" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette note ?');">
+                            Supprimer
+                        </button>
+                    </form>
+                </div>
+                <br />
+            }
         }
         else
         {
