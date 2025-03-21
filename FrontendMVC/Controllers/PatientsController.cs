@@ -103,7 +103,7 @@ namespace FrontendMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var token = User.FindFirst("Token")?.Value;
