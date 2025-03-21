@@ -15,7 +15,6 @@ if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
 
 ConfigurationManager configuration = builder.Configuration;
 
-// Récupération de la clé secrète (doit être la même que IdentityAPI)
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

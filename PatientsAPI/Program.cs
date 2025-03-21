@@ -10,14 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
 {
-    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
 }
 ConfigurationManager configuration = builder.Configuration;
 
-var ConnectionString = builder.Configuration["ConnectionStrings:DefaultConnection"] ?? "NOT FOUND";
-Console.WriteLine($"Chaine de connexion détectée : {ConnectionString}");
-
-// Configuration de la base de données
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -41,7 +38,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// Ajout des contrôleurs et configuration Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -79,7 +75,6 @@ builder.Services.AddScoped<IGenderService, GenderService>();
 
 var app = builder.Build();
 
-// Activation de Swagger uniquement en mode développement
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -89,11 +84,11 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.EnsureCreated(); // Crée la base si elle n'existe pas
+    dbContext.Database.EnsureCreated();
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Activation de l'authentification JWT
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
