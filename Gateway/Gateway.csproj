@@ -15,4 +15,11 @@
     <PackageReference Include="Ocelot" Version="23.4.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.Docker.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

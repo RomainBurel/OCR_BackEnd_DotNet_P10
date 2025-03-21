@@ -16,6 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.Docker.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\NotesAPI_SharedModels\NotesAPI_SharedModels.csproj" />
   </ItemGroup>
 
