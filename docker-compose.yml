@@ -43,6 +43,7 @@ services:
       - "27017:27017"
     volumes:
       - mongovolume:/data/db
+      - mongoconfig:/data/configdb
     networks:
       - reseau
 
@@ -189,3 +190,4 @@ volumes:
   sqlpatientvolume:
   sqlidentityvolume:
   mongovolume:
+  mongoconfig:  
