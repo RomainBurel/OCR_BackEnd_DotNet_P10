@@ -53,11 +53,11 @@ OU
    ```
 
 ## Green Code
-** Définition
+### Définition
 Le Green Code (ou développement éco-responsable) vise à réduire l'impact environnemental du code informatique en optimisant les performances, la consommation énergétique et les ressources utilisées.
 L'objectif est d'écrire un code plus efficace, qui consomme moins d'énergie et de bande passante, tout en restant performant et maintenable.
 
-** Propositions de mise en place
+### Propositions de mise en place
 - Implémenter un cache mémoire pour réduire les appels aux API
 - S'assurer que les DTOs ne renvoient que les données nécessaires pour limiter les flux de données
 - Frontend : ne charger les infos que lorsqu'elles sont demandées, par exemple les notes ne pourraient être affichées que lorsqu’on clique sur un bouton / idem pour le rapport de risque
