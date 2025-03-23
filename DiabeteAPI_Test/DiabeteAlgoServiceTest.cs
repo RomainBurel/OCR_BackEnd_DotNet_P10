@@ -61,7 +61,7 @@ namespace DiabeteAPI_Test
         [Fact]
         public void GetDiabeteRisk_TestCase4_ShouldReturn_RiskEarlyOnset()
         {
-            var woman22Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 22, 6);
+            var woman22Risk = _diabeteService.GetDiabeteRisk(PatientGender.Female, 22, 7);
             var expectedRisk = DiabeteRisk.EarlyOnset;
 
             Assert.Equal(expectedRisk, woman22Risk);
@@ -296,7 +296,7 @@ namespace DiabeteAPI_Test
         }
 
         [Fact]
-        public void GetNbTriggers_TestCase4_ShouldReturn_6()
+        public void GetNbTriggers_TestCase4_ShouldReturn_7()
         {
             var notes = new List<string>
             {
@@ -306,7 +306,7 @@ namespace DiabeteAPI_Test
                 "Taille, Poids, Cholestérol, Vertige et Réaction"
             };
             int nbTriggers = _diabeteService.GetNbTriggers(notes);
-            int expectedNbTriggers = 6;
+            int expectedNbTriggers = 7;
 
             Assert.Equal(expectedNbTriggers, nbTriggers);
         }
