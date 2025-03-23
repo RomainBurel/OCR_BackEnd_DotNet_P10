@@ -23,7 +23,8 @@ namespace NotesAPI.Repositories
 
         public async Task Delete(string id)
         {
-            await this._notesCollection.DeleteOneAsync(id);
+            var filter = Builders<Note>.Filter.Eq(n => n.NoteId, id);
+            await this._notesCollection.DeleteOneAsync(filter);
         }
 
         public async Task DeleteAllForAPatient(int patientId)

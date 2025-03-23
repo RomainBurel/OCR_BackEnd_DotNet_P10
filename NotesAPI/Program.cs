@@ -9,25 +9,20 @@ using NotesAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
-
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
+}
 ConfigurationManager configuration = builder.Configuration;
-
-// Configuration MongoDB
-builder.Services.Configure<NoteDatabaseSettings>(
-    configuration.GetSection("MongoDbSettings"));
-
-var mongoSettings = configuration.GetSection("MongoDbSettings");
-var client = new MongoClient(mongoSettings["ConnectionString"]);
-var database = client.GetDatabase(mongoSettings["DatabaseName"]);
-
-builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings["CollectionName"]));
 
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:7233"; // L'URL de IdentityAPI
+        options.Authority = configuration["ApiURLs:identityApiURL"];
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -36,34 +31,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = configuration["JwtSettings:Issuer"],
             ValidAudience = configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"ERREUR AUTHENTIFICATION : {context.Exception.Message}");
-                return Task.CompletedTask;
-            },
-            OnChallenge = context =>
-            {
-                Console.WriteLine("JWT REJETÉ : " + context.ErrorDescription);
-                return Task.CompletedTask;
-            },
-            OnMessageReceived = context =>
-            {
-                Console.WriteLine($"Token reçu : {context.Token}");
-                return Task.CompletedTask;
-            }
+            IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers().AddNewtonsoftJson()
-    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -92,13 +66,22 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddSingleton<NoteDbContext>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<INoteService, NoteService>();
+
+builder.Services.Configure<NoteDatabaseSettings>(configuration.GetSection("MongoDbSettings"));
+
+var mongoSettings = configuration.GetSection("MongoDbSettings").Get<NoteDatabaseSettings>();
+var client = new MongoClient(mongoSettings.ConnectionString);
+var database = client.GetDatabase(mongoSettings.DatabaseName);
+
+builder.Services.AddSingleton<NoteDbContext>();
+builder.Services.AddSingleton(database.GetCollection<Note>(mongoSettings.ConnectionString));
 builder.Services.AddSingleton<SeedData>();
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -107,6 +90,17 @@ if (app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
+    var collections = database.ListCollectionNames().ToList();
+    if (!collections.Contains(mongoSettings.CollectionName))
+    {
+        database.CreateCollection(mongoSettings.CollectionName);
+        Console.WriteLine($"Collection '{mongoSettings.CollectionName}' créée !");
+    }
+    else
+    {
+        Console.WriteLine($"Collection '{mongoSettings.CollectionName}' existe déjà !");
+    }
+
     var seeder = scope.ServiceProvider.GetRequiredService<SeedData>();
     await seeder.Seed();
 }

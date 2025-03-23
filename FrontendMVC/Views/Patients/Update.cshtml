@@ -4,36 +4,43 @@
 
 <form asp-action="Update" method="post">
     <input type="hidden" name="Id" value="@ViewBag.PatientId" />
-    <div>
-        <label>Prénom</label>
-        <input asp-for="FirstName" required />
-    </div>
-    <div>
-        <label>Nom</label>
-        <input asp-for="LastName" required />
-    </div>
-    <div>
-        <label>Date de naissance</label>
-        <input asp-for="DateOfBirth" type="date" required />
-    </div>
-    <div>
-        <label>Genre</label>
-        <select asp-for="GenderId">
-            @foreach (var gender in ViewBag.Genders)
-            {
-                <option value="@gender.Id">@gender.GenderName</option>
-            }
-        </select>
-    </div>
-    <div>
-        <label>Adresse</label>
-        <input asp-for="Address" />
-    </div>
-    <div>
-        <label>Téléphone</label>
-        <input asp-for="PhoneNumber" />
-    </div>
-    <button type="submit">Enregistrer</button>
+    <table class="patient-update">
+        <tr>
+            <td><label>Prénom</label></td>
+            <td><input asp-for="FirstName" required /></td>
+        </tr>
+        <tr>
+            <td><label>Nom</label></td>
+            <td><input asp-for="LastName" required /></td>
+        </tr>
+        <tr>
+			<td><label>Date de naissance</label></td>
+			<td><input asp-for="DateOfBirth" type="date" required /></td>
+        </tr>
+        <tr>
+            <td><label>Genre</label></td>
+			<td>
+				<select asp-for="GenderId">
+					@foreach (var gender in ViewBag.Genders)
+					{
+						<option value="@gender.Id">@gender.GenderName</option>
+					}
+				</select>
+			</td>
+        </tr>
+        <tr>
+			<td><label>Adresse</label></td>
+			<td><input asp-for="Address" /></td>
+        </tr>
+        <tr>
+			<td><label>Téléphone</label></td>
+			<td><input asp-for="PhoneNumber" /></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td><button type="submit" class="btn btn-success">Enregistrer</button></td>
+            <td><a asp-controller="Patients" asp-action="Index" class="btn btn-secondary">Annuler</a></td>
+        </tr>
+    </table>
 </form>
-
-<a asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>

@@ -24,8 +24,7 @@
         }
       ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
+        "AuthenticationProviderKey": "Bearer"
       }
     },
     {
@@ -40,24 +39,37 @@
         }
       ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
+        "AuthenticationProviderKey": "Bearer"
       }
     },
     {
-      "UpstreamPathTemplate": "/Notes/{everything}",
+      "UpstreamPathTemplate": "/Note/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "DownstreamPathTemplate": "/Notes/{everything}",
+      "DownstreamPathTemplate": "/Note/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7121
+          "Port": 7148
         }
       ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/Diabete/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/Diabete/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7246
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
       }
     }
   ],

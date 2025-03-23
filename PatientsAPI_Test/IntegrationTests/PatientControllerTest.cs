@@ -8,7 +8,6 @@ namespace PatientsAPI_Test.IntegrationTests
     [Collection("IntegrationTests")]
     public class PatientControllerTest : GenericControllerTest<Patient>
     {
-
         public PatientControllerTest(CustomPatientsAPIFactory<PatientsAPI.Program> factoryPatient) : base(factoryPatient)
         {
         }

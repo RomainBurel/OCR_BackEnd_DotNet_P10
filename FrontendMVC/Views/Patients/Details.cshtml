@@ -1,55 +1,83 @@
 ﻿@using PatientsAPI_SharedModels
 @model PatientDetailsViewModel
 
-<h2>Détail du patient</h2>
-
-<table>
-    <tr><th>Nom :</th><td>@Model.Patient.LastName</td></tr>
-    <tr><th>Prénom :</th><td>@Model.Patient.FirstName</td></tr>
-    <tr><th>Date de naissance :</th><td>@Model.Patient.DateOfBirth.ToShortDateString()</td></tr>
-    <tr><th>Adresse :</th><td>@Model.Patient.Address</td></tr>
-    <tr><th>Téléphone :</th><td>@Model.Patient.PhoneNumber</td></tr>
-</table>
-
-<h3>Notes Médicales</h3>
-@if (Model.Notes.Any())
-{
-    <ul>
-        @foreach (var note in Model.Notes)
-        {
-            <li>
-                <p>@note.Content</p>
-                <p><small>Ajouté le : @note.CreatedAt</small></p>
-
-                <a asp-controller="Patients" asp-action="UpdateNote" asp-route-noteId="@note.NoteId" asp-route-patientId="@Model.Patient.PatientId" class="btn btn-warning">
-                    Modifier
-                </a>
-
-                <form asp-controller="Patients" asp-action="DeleteNote" method="post" style="display:inline;">
-                    <input type="hidden" name="id" value="@note.NoteId" />
-                    <input type="hidden" name="patientId" value="@Model.Patient.PatientId" />
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette note ?');">
-                        Supprimer
-                    </button>
-                </form>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>Aucune note disponible.</p>
-}
-
-<h3>Ajouter une Note</h3>
-<form asp-controller="Patients" asp-action="AddNote" method="post">
-    <input type="hidden" name="Id" value="@Model.Patient.PatientId" />
-
-    <div>
-        <textarea name="Content" required></textarea>
-    </div>
-
-    <button type="submit">Ajouter</button>
-</form>
-
 <a asp-controller="Patients" asp-action="Index" class="btn btn-primary">Retour à la liste</a>
+<br />
+<h2>Visualisation du patient</h2>
+<br />
+<div class="d-flex flex-row justify-content-around">
+    <div class="patient-detail">
+        <h3>Informations</h3>
+        @if (@Model.Patient.UpdatedAt != @Model.Patient.CreatedAt)
+        {
+            <p><small>Fiche mise à jour le : @Model.Patient.UpdatedAt</small></p>
+        }
+        else
+        {
+            <p><small>Fiche créée le : @Model.Patient.CreatedAt</small></p>
+        }
+        <table>
+            <tr><th>Nom :</th><td>@Model.Patient.LastName</td></tr>
+            <tr><th>Prénom :</th><td>@Model.Patient.FirstName</td></tr>
+            <tr><th>Date de naissance :</th><td>@Model.Patient.DateOfBirth.ToShortDateString()</td></tr>
+            <tr><th>Adresse :</th><td>@Model.Patient.Address</td></tr>
+            <tr><th>Téléphone :</th><td>@Model.Patient.PhoneNumber</td></tr>
+        </table>
+    </div>
+    <div class="patient-diabete-report">
+        <h3>Risque de diabète</h3>
+        <p>@Model.DiabeteRiskReport</p>
+    </div>
+</div>
+<br />
+<div class="d-flex flex-row justify-content-around">
+    <div class="patient-notes">
+        <h3>Notes Médicales</h3>
+        @if (Model.Notes.Any())
+        {
+            @foreach (var note in Model.Notes)
+            {
+                <div class="note-view">
+                    @if (@note.UpdatedAt != note.CreatedAt)
+                    {
+                        <p><small>Modifié le : @note.UpdatedAt</small></p>
+                    }
+                    else
+                    {
+					    <p><small>Créé le : @note.CreatedAt</small></p>
+                    }
+                    <textarea class="note" readonly rows="5">@note.Content</textarea>
+
+                    <a asp-controller="Patients" asp-action="UpdateNote" asp-route-noteId="@note.NoteId" asp-route-patientId="@Model.Patient.PatientId" class="btn btn-warning">
+                        Modifier
+                    </a>
+
+                    <form asp-controller="Patients" asp-action="DeleteNote" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@note.NoteId" />
+                        <input type="hidden" name="patientId" value="@Model.Patient.PatientId" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette note ?');">
+                            Supprimer
+                        </button>
+                    </form>
+                </div>
+                <br />
+            }
+        }
+        else
+        {
+            <p>Aucune note disponible.</p>
+        }
+    </div>
+    <div class="patient-notes-add">
+        <h3>Ajouter une Note</h3>
+        <form asp-controller="Patients" asp-action="AddNote" method="post">
+            <input type="hidden" name="Id" value="@Model.Patient.PatientId" />
+
+            <div>
+                <textarea name="Content" required class="new-note-content" rows="5"></textarea>
+            </div>
+
+            <button class="btn btn-success" type="submit">Ajouter</button>
+        </form>
+    </div>
+</div>
