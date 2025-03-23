@@ -7,9 +7,14 @@ using PatientsAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
+}
 ConfigurationManager configuration = builder.Configuration;
 
-// Configuration de la base de données
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -17,7 +22,8 @@ var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:7233"; // L'URL de IdentityAPI
+        options.Authority = configuration["ApiURLs:identityApiURL"];
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -32,7 +38,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// Ajout des contrôleurs et configuration Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -70,15 +75,20 @@ builder.Services.AddScoped<IGenderService, GenderService>();
 
 var app = builder.Build();
 
-// Activation de Swagger uniquement en mode développement
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.EnsureCreated();
+}
+
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Activation de l'authentification JWT
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

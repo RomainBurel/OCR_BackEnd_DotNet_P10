@@ -1,21 +1,26 @@
+using IdentityAPI.Data;
+using IdentityAPI.Domain;
+using IdentityAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using IdentityAPI.Data;
-using IdentityAPI.Domain;
-using Microsoft.OpenApi.Models;
-using IdentityAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
+}
 ConfigurationManager configuration = builder.Configuration;
 
-// Configuration de la base de données
+// Database configuration
 builder.Services.AddDbContext<IdentityDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configuration d'Identity
+// Identity configuration
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     // User parameters (Each email can be used for only one User record)
@@ -36,10 +41,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<IdentityDbContext>()
     .AddDefaultTokenProviders();
 
-// Récupération de la clé secrète pour JWT
 var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
 
-// Configuration de l'authentification JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -60,28 +63,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Please input JWT Token with Bearer like following : Bearer {token}",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference { Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization();
 
@@ -91,6 +73,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+    dbContext.Database.EnsureCreated();
 }
 
 app.UseHttpsRedirection();

@@ -32,7 +32,9 @@ namespace PatientsAPI.Data
                     DateOfBirth = new DateTime(1966, 12, 31),
                     GenderId = 2,
                     Address = "1 Brookside St",
-                    PhoneNumber = "100-222-3333"
+                    PhoneNumber = "100-222-3333",
+                    CreatedAt = new DateTime(2025, 03, 01),
+                    UpdatedAt = new DateTime(2025, 03, 01)
                 },
                 new Patient
                 {
@@ -42,7 +44,9 @@ namespace PatientsAPI.Data
                     DateOfBirth = new DateTime(1945, 06, 24),
                     GenderId = 1,
                     Address = "2 High St",
-                    PhoneNumber = "200-333-4444"
+                    PhoneNumber = "200-333-4444",
+                    CreatedAt = new DateTime(2025, 03, 01),
+                    UpdatedAt = new DateTime(2025, 03, 01)
                 },
                 new Patient
                 {
@@ -52,7 +56,9 @@ namespace PatientsAPI.Data
                     DateOfBirth = new DateTime(2004, 06, 18),
                     GenderId = 1,
                     Address = "3 Club Road",
-                    PhoneNumber = "300-444-5555"
+                    PhoneNumber = "300-444-5555",
+                    CreatedAt = new DateTime(2025, 03, 01),
+                    UpdatedAt = new DateTime(2025, 03, 01)
                 },
                 new Patient
                 {
@@ -62,7 +68,9 @@ namespace PatientsAPI.Data
                     DateOfBirth = new DateTime(2002, 06, 28),
                     GenderId = 2,
                     Address = "4 Valley Dr",
-                    PhoneNumber = "400-555-6666"
+                    PhoneNumber = "400-555-6666",
+                    CreatedAt = new DateTime(2025, 03, 01),
+                    UpdatedAt = new DateTime(2025, 03, 01)
                 }
             );
         }

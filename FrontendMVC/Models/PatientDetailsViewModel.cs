@@ -7,5 +7,6 @@ namespace FrontendMVC.Models
     {
         public PatientModel Patient { get; set; }
         public List<NoteModel> Notes { get; set; }
+        public string DiabeteRiskReport { get; set; } = "";
     }
 }

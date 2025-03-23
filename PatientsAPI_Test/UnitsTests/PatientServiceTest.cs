@@ -65,7 +65,7 @@ namespace PatientsAPI_Test.UnitsTests
         }
 
         [Fact]
-        public async Task GetAll_ShouldReturnListOfBidListModel()
+        public async Task GetAll_ShouldReturnListOfPatientModel()
         {
             // Arrange
             _mockRepository.Setup(repo => repo.GetAll()).Returns(Task.Run(() => GetPatients()));

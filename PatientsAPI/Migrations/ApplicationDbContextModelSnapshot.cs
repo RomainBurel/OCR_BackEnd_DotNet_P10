@@ -62,6 +62,9 @@ namespace PatientsAPI.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
@@ -79,6 +82,9 @@ namespace PatientsAPI.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("PatientId");
 
                     b.ToTable("Patients");
@@ -88,41 +94,49 @@ namespace PatientsAPI.Migrations
                         {
                             PatientId = 1,
                             Address = "1 Brookside St",
+                            CreatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(1966, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Test",
                             GenderId = 2,
                             LastName = "TestNone",
-                            PhoneNumber = "100-222-3333"
+                            PhoneNumber = "100-222-3333",
+                            UpdatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             PatientId = 2,
                             Address = "2 High St",
+                            CreatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(1945, 6, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Test",
                             GenderId = 1,
                             LastName = "TestBorderline",
-                            PhoneNumber = "200-333-4444"
+                            PhoneNumber = "200-333-4444",
+                            UpdatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             PatientId = 3,
                             Address = "3 Club Road",
+                            CreatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(2004, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Test",
                             GenderId = 1,
                             LastName = "TestDanger",
-                            PhoneNumber = "300-444-5555"
+                            PhoneNumber = "300-444-5555",
+                            UpdatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             PatientId = 4,
                             Address = "4 Valley Dr",
+                            CreatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(2002, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Test",
                             GenderId = 2,
                             LastName = "TestEarlyOnset",
-                            PhoneNumber = "400-555-6666"
+                            PhoneNumber = "400-555-6666",
+                            UpdatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 #pragma warning restore 612, 618

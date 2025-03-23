@@ -22,7 +22,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Déconnexion (@User.Identity.Name)</a>
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Déconnexion (@User.Identity.Name)</a>
                         }
                         else
                         {

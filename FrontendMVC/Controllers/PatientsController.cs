@@ -11,10 +11,12 @@ namespace FrontendMVC.Controllers
     public class PatientsController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly string _gatewayUrl;
 
-        public PatientsController(HttpClient httpClient)
+        public PatientsController(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _gatewayUrl = configuration["ApiURLs:gatewayURL"];
         }
 
         [HttpGet]
@@ -23,7 +25,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var patients = await _httpClient.GetFromJsonAsync<List<PatientModel>>("https://localhost:7258/Patient/list");
+            var patients = await _httpClient.GetFromJsonAsync<List<PatientModel>>($"{_gatewayUrl}/Patient/list");
             return View(patients);
         }
 
@@ -33,9 +35,10 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var patient = await _httpClient.GetFromJsonAsync<PatientModel>($"https://localhost:7258/Patient/display/{id}");
-            var notes = await _httpClient.GetFromJsonAsync<List<NoteModel>>($"https://localhost:7258/Notes/displayPatientNotes/{id}");
-            var patientDetailsViewModel = new PatientDetailsViewModel { Patient = patient, Notes = notes };
+            var patient = await _httpClient.GetFromJsonAsync<PatientModel>($"{_gatewayUrl}/Patient/display/{id}");
+            var notes = await _httpClient.GetFromJsonAsync<List<NoteModel>>($"{_gatewayUrl}/Note/displayPatientNotes/{id}");
+            var diabeteRiskReport = await _httpClient.GetStringAsync($"{_gatewayUrl}/Diabete/diabeteReport/{id}");
+            var patientDetailsViewModel = new PatientDetailsViewModel { Patient = patient, Notes = notes, DiabeteRiskReport = diabeteRiskReport };
 
             return View(patientDetailsViewModel);
         }
@@ -46,7 +49,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var genders = await _httpClient.GetFromJsonAsync<List<GenderModel>>("https://localhost:7258/Gender/list");
+            var genders = await _httpClient.GetFromJsonAsync<List<GenderModel>>($"{_gatewayUrl}/Gender/list");
             ViewBag.Genders = genders;
 
             return View();
@@ -58,7 +61,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7258/Patient/creation", patient);
+            var response = await _httpClient.PostAsJsonAsync($"{_gatewayUrl}/Patient/creation", patient);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -75,21 +78,21 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var patient = await _httpClient.GetFromJsonAsync<PatientModelUpdate>($"https://localhost:7258/Patient/Update/{id}");
-            var genders = await _httpClient.GetFromJsonAsync<List<GenderModel>>("https://localhost:7258/Gender/list");
+            var patient = await _httpClient.GetFromJsonAsync<PatientModelUpdate>($"{_gatewayUrl}/Patient/Update/{id}");
+            var genders = await _httpClient.GetFromJsonAsync<List<GenderModel>>($"{_gatewayUrl}/Gender/list");
             ViewBag.PatientId = id;
             ViewBag.Genders = genders;
 
             return View(patient);
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Update([FromForm] int id, [FromForm] PatientModelUpdate patient)
         {
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7258/Patient/update/{id}", patient);
+            var response = await _httpClient.PutAsJsonAsync($"{_gatewayUrl}/Patient/update/{id}", patient);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -100,13 +103,13 @@ namespace FrontendMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.DeleteAsync($"https://localhost:7258/Patient/deletion/{id}");
+            var response = await _httpClient.DeleteAsync($"{_gatewayUrl}/Patient/deletion/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -128,7 +131,7 @@ namespace FrontendMVC.Controllers
                 Content = Content
             };
 
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7258/Notes/creation", newNote);
+            var response = await _httpClient.PostAsJsonAsync($"{_gatewayUrl}/Note/creation", newNote);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -144,7 +147,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var note = await _httpClient.GetFromJsonAsync<NoteModelUpdate>($"https://localhost:7258/Notes/update/{noteId}");
+            var note = await _httpClient.GetFromJsonAsync<NoteModelUpdate>($"{_gatewayUrl}/Note/update/{noteId}");
 
             if (note == null)
             {
@@ -163,7 +166,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7258/Notes/update/{id}", model);
+            var response = await _httpClient.PutAsJsonAsync($"{_gatewayUrl}/Note/update/{id}", model);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -180,7 +183,7 @@ namespace FrontendMVC.Controllers
             var token = User.FindFirst("Token")?.Value;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.DeleteAsync($"https://localhost:7258/Notes/deletion/{id}");
+            var response = await _httpClient.DeleteAsync($"{_gatewayUrl}/Note/deletion/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
