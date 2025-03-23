@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabeteAPI_Test", "DiabeteA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesAPI", "NotesAPI\NotesAPI.csproj", "{FD59E11A-9401-4E6B-8E4E-94857DCD265D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesAPI_Test", "NotesAPI_Test\NotesAPI_Test.csproj", "{74FEB9B0-8F2E-43C2-A660-6C3EEBC13322}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{FD59E11A-9401-4E6B-8E4E-94857DCD265D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD59E11A-9401-4E6B-8E4E-94857DCD265D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD59E11A-9401-4E6B-8E4E-94857DCD265D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74FEB9B0-8F2E-43C2-A660-6C3EEBC13322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74FEB9B0-8F2E-43C2-A660-6C3EEBC13322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74FEB9B0-8F2E-43C2-A660-6C3EEBC13322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74FEB9B0-8F2E-43C2-A660-6C3EEBC13322}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
